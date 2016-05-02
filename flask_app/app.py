@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 from flask import Flask, jsonify
+from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
+app.config['MONGO_DBNAME'] = 'eddies'
+mongo = PyMongo(app)
 
 @app.route('/')
 def index():
@@ -28,7 +31,18 @@ eddy_data ={
 
 @app.route('/eddy')
 def get_eddy():
+    """A single test eddy."""
     return jsonify(eddy_data)
+
+@app.route('/eddies')
+def get_eddies():
+    """Query mongodb for all eddies in the database."""
+    data = [eddy for eddy in mongo.db.rcs_eddies.find()]
+    #data = mongo.db.rcs_eddies.find_one_or_404()
+    #app.logger.debug(data)
+    # wrapp data into a larger FeatureSet
+    fs = {'type': 'FeatureSet', 'features': data}
+    return jsonify(fs)
 
 @app.route('/static/<path:path>')
 def send_js(path):
