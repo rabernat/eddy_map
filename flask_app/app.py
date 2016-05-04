@@ -12,7 +12,7 @@ def index():
 
 # some test data for leaflet to plot
 eddy_data ={
-    'type': 'FeatureSet',
+    'type': 'FeatureCollection',
     'features':[
         {'type': 'Feature',
          'properties': {'name': 'start', 'date': '1992-01-01'},
@@ -35,13 +35,24 @@ def get_eddy():
     return jsonify(eddy_data)
 
 @app.route('/eddies')
-def get_eddies():
+def get_eddies(full_data=False):
     """Query mongodb for all eddies in the database."""
-    data = [eddy for eddy in mongo.db.rcs_eddies.find()]
-    #data = mongo.db.rcs_eddies.find_one_or_404()
-    #app.logger.debug(data)
-    # wrapp data into a larger FeatureSet
-    fs = {'type': 'FeatureSet', 'features': data}
+   
+    # get everything
+    filter = None
+
+    if full_data:
+        # get all fields, overloads the browser
+        projection = None
+    else:
+        # just get the first three features
+        # (initial center, final center, trajectory)
+        projection = {'features': {'$slice': 3}}
+
+    data = [eddy for eddy in mongo.db.rcs_eddies.find(filter, projection)]
+    
+    # wrap data into a larger FeatureCollection
+    fs = {'type': 'FeatureCollection', 'features': data}
     return jsonify(fs)
 
 @app.route('/static/<path:path>')
