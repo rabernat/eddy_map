@@ -49,7 +49,14 @@ def get_eddies(full_data=False):
         # (initial center, final center, trajectory)
         projection = {'features': {'$slice': 3}}
 
-    data = [eddy for eddy in mongo.db.rcs_eddies.find(filter, projection)]
+    data = []
+    for eddy in mongo.db.rcs_eddies.find(filter, projection):
+        # inject id into properties of start point
+        try:
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            data.append(eddy)
+        except KeyError:
+            app.logger.warning('problem parsing eddy ' + eddy['_id'])
     
     # wrap data into a larger FeatureCollection
     fs = {'type': 'FeatureCollection', 'features': data}
