@@ -25,6 +25,9 @@
 			//id: 'mapbox.blue-marble-topo-bathy-jul-bw'
 		}).addTo(mymap);
 
+		var eddyLayer = L.geoJson.ajax()
+		eddyLayer.addTo(mymap);
+
 		var myStyle = {
 		    "color": "#000",
 		    "weight": 1,
@@ -41,14 +44,28 @@
 		    fillOpacity: 0.5
 		};
 
+		// use a closure to pass extra arguments
+		var eddyClicked = function(eddy_id) {
+			return function() {
+				console.log('Show eddy details ' + eddy_id)
+				eddyUrl = "/eddy/" + eddy_id
+				eddyLayer.refresh(eddyUrl,
+					{style: myStyle, pointToLayer: eddyEndpointToLayer});
+			}
+		}
+
 		function eddyEndpointToLayer(feature, latlng) {
 			if (feature.properties.name=='start_center') {
 			    var color = "#00ddcc";
 			} else if (feature.properties.name=='end_center'){  
 			    var color = "#dd0080";
 			}
-			return L.circleMarker(latlng,
+			var cm = L.circleMarker(latlng,
 			 	$.extend({}, geojsonMarkerOptions, {fillColor: color}))
+			if (feature.properties.eddy_id) {
+				cm = cm.on("click", eddyClicked(feature.properties.eddy_id))
+			}
+			return cm
 		}
 
 		function onEachFeature(feature, layer) {
@@ -59,9 +76,6 @@
 			}
 		    }
 		    layer.bindPopup(out.join("<br />"));
-		    if (feature._id) {
-			    console.log('onEachFeature saw FeatureCollection _id=' + feature_id);
-		    }
 		}
 
 
