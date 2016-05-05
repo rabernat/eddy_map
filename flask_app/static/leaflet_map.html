@@ -31,7 +31,7 @@
 		var myStyle = {
 		    "color": "#000",
 		    "weight": 1,
-		    "opacity": 0.65
+		    "opacity": 0.65,
 		};
 
 		var geojsonMarkerOptions = {
@@ -40,42 +40,62 @@
 		    color: "#000",
 		    weight: 1,
 		    opacity: 1,
-				stroke: false,
+		    stroke: false,
 		    fillOpacity: 0.5
 		};
 
-		// use a closure to pass extra arguments
-		var eddyClicked = function(eddy_id) {
-			return function() {
-				console.log('Show eddy details ' + eddy_id)
-				eddyUrl = "/eddy/" + eddy_id
-				eddyLayer.refresh(eddyUrl,
-					{style: myStyle, pointToLayer: eddyEndpointToLayer});
-			}
-		}
-
 		function eddyEndpointToLayer(feature, latlng) {
-			if (feature.properties.name=='start_center') {
-			    var color = "#00ddcc";
-			} else if (feature.properties.name=='end_center'){  
-			    var color = "#dd0080";
+			var clickable = false
+			switch (feature.properties.name) {
+				case 'start_center':
+				    var color = "#00ddcc";
+				    clickable = true
+				    break;
+				case 'start_points':
+				    var color = "#11ffed";
+				    break;
+			        case 'end_center':  
+				    var color = "#dd0080";
+				    break;
+				case 'end_points':
+				    var color = "#ff2ba6";
+				    break;
+				default:
+				    var color = "#999";
+
 			}
 			var cm = L.circleMarker(latlng,
-			 	$.extend({}, geojsonMarkerOptions, {fillColor: color}))
+			 	$.extend({}, geojsonMarkerOptions, {fillColor: color, clickable: clickable}))
 			if (feature.properties.eddy_id) {
 				cm = cm.on("click", eddyClicked(feature.properties.eddy_id))
 			}
 			return cm
 		}
 
+
+		// use a closure to pass extra arguments
+		var eddyClicked = function(eddy_id) {
+			return function() {
+				console.log('Show eddy details ' + eddy_id)
+				eddyUrl = "/eddy/" + eddy_id
+				mymap.removeLayer(eddyLayer)
+				eddyLayer = L.geoJson.ajax(eddyUrl,
+						{style: myStyle, pointToLayer: eddyEndpointToLayer});
+				eddyLayer.setZIndex(99999);
+				eddyLayer.addTo(mymap)
+				//eddyLayer.refresh(eddyUrl,
+				//	{style: myStyle, pointToLayer: eddyEndpointToLayer});
+			}
+		}
+
 		function onEachFeature(feature, layer) {
-		    var out = [];
-		    if (feature.properties) {
+		    if (feature.properties.name == 'start_center') {
+			    var out = [];
 			    for(key in feature.properties){
 				out.push(key+": "+feature.properties[key]);
-			}
+				}
+			    layer.bindPopup(out.join("<br />"));
 		    }
-		    layer.bindPopup(out.join("<br />"));
 		}
 
 
