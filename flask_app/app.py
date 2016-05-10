@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
@@ -8,7 +8,7 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def index():
-    return "Hello, World!"
+    return send_file('static/leaflet_map.html')
 
 @app.route('/eddy/<eddy_id>')
 def get_eddy(eddy_id):
