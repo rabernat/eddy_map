@@ -8,7 +8,7 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def index():
-    return send_file('static/leaflet_map.html')
+    return send_file('static/index.html')
 
 @app.route('/eddy/<eddy_id>')
 def get_eddy(eddy_id):
