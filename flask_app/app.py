@@ -17,11 +17,11 @@ def get_eddy(eddy_id):
     return jsonify(eddy)
 
 @app.route('/eddies')
-def get_eddies(full_data=False):
+def get_eddies(full_data=False, duration=90):
     """Query mongodb for all eddies in the database."""
    
     # get everything
-    filter = None
+    filter = {'duration': duration} 
 
     if full_data:
         # get all fields, overloads the browser
