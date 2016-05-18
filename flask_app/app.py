@@ -17,7 +17,7 @@ def get_eddy(eddy_id):
     return jsonify(eddy)
 
 @app.route('/eddies')
-def get_eddies(full_data=False, duration=90):
+def get_eddies(full_data=False, duration=30, add_mean_trajectory=False):
     """Query mongodb for all eddies in the database."""
    
     # get everything
@@ -27,15 +27,26 @@ def get_eddies(full_data=False, duration=90):
         # get all fields, overloads the browser
         projection = None
     else:
-        # just get the first three features
-        # (initial center, final center, trajectory)
-        projection = {'features': {'$slice': 3}}
+        # just get the first two features
+        # (initial center, final center)
+        projection = {'features': {'$slice': 1}}
 
     data = []
     for eddy in mongo.db.rcs_eddies.find(filter, projection):
         # inject id into properties of start point
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            if add_mean_trajectory:
+                start_pt = eddy['features'][0]['geometry']['coordinates']
+                end_pt = eddy['features'][1]['geometry']['coordinates']
+                eddy['features'].append({
+                    'type': 'Feature',
+                    'properties': {'name': 'trajectory'},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [start_pt, end_pt]
+                        }
+                    })
             data.append(eddy)
         except KeyError:
             app.logger.warning('problem parsing eddy ' + eddy['_id'])

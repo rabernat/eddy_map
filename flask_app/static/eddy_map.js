@@ -11,8 +11,9 @@ eddyLayer.addTo(mymap);
 
 var myStyle = {
     "color": "#000",
-    "weight": 1,
-    "opacity": 0.65,
+    "weight": 2,
+    "opacity": 1,
+    zIndex: 10000,
 };
 
 var geojsonMarkerOptions = {
@@ -22,7 +23,8 @@ var geojsonMarkerOptions = {
     weight: 1,
     opacity: 1,
     stroke: false,
-    fillOpacity: 0.5
+    fillOpacity: 0.5,
+    zIndex: -10000
 };
 
 function eddyEndpointToLayer(feature, latlng) {
