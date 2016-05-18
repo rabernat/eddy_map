@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, request
 from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
@@ -19,7 +19,11 @@ def get_eddy(eddy_id):
 @app.route('/eddies')
 def get_eddies(full_data=False, duration=30, add_mean_trajectory=False):
     """Query mongodb for all eddies in the database."""
-   
+
+    # maybe overwrite duration from query string
+    if request.args.get('duration'):
+        duration = int(request.args.get('duration'))
+
     # get everything
     filter = {'duration': duration} 
 

@@ -89,3 +89,9 @@ var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl,
 			 onEachFeature: onEachFeature});
 geojsonLayer.addTo(mymap);
 
+// jQuery for chaging radio button
+$(document).ready(function() {
+    $('input:radio[name=duration]').change(function() {
+        geojsonLayer.refresh("/eddies?duration=" + this.value)
+    });
+});
