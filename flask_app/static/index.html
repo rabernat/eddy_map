@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 
+
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
@@ -9,34 +10,40 @@
   <meta name="author" content="">
   <meta name="keywords" content="">
   <meta name="description" content="">
-  
+
+
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:400,300,600" >
 
+    
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->    
-  <link rel="stylesheet" href="/static/iThing.css">
+  <link rel="stylesheet" href="/static/iThing-min.css">
   <link rel="stylesheet" href="/static/leaflet.css">
   <link rel="stylesheet" href="/static/normalize.css">
   <link rel="stylesheet" href="/static/skeleton.css">    
-  
-  <script type='text/javascript' src="/static/leaflet.js"></script>
-  <script type='text/javascript' src="/static/leaflet.ajax.min.js"></script>
-  <script type='text/javascript' src="/static/leaflet.spin.js"></script>
-  <script type='text/javascript' src="/static/spin.min.js"></script>
-  
-  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-  <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
+    
+  <!-- JS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
+  <script src="/static/leaflet.js"></script>
+  <script src="/static/leaflet.ajax.min.js"></script>
+  <script src="/static/leaflet.spin.js"></script>
+  <script src="/static/jquery.min.js"></script>
+  <script src="/static/jquery-ui.min.js"></script>
+  <script src="/static/spin.min.js"></script>    
+
+    
 </head>
-
 <body style="">
 
+    
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
@@ -46,22 +53,27 @@
         <h1>Ocean Eddy Map</h1>
       </div>
     </div>
+
       
-  <!-- Range Sliders
+  <!-- jQRangeSlider
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
     <div class="row">
       <div id="dateSlider"></div>
-      <p>Date</p>
+      <div><p>Date</p></div>
       <div id="slider_lat"></div>
-      <p>Latitude</p>
+      <div><p>Latitude</p></div>
       <div id="slider_lon"></div>
-      <p>Longitude</p>
+      <div><p>Longitude</p></div>
       <div id="slider_dur"></div>
-      <p>Duration</p>
+      <div><p>Duration</p></div>
       <script src="/static/jQAllRangeSliders-min.js"></script>
+      <script src="/static/jquery.mousewheel.min.js"></script>
       <script src="/static/range_slider.js"></script>
     </div>
+
       
+<!-- Radio Button
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->       
 <!--      
     <form>        
     <div class="row">
@@ -92,20 +104,23 @@
     </div>
     </form>
 -->
-      
+ 
+ 
     <br>
     <br>
-      
-<!-- Leaflet Maps
+
+
+<!-- Leaflet
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->      
     <div class="row">
       <div class="twelve columns">
         <div id="mapid" style="width: 100%; height: 500px; border: 1px solid #666;"></div>
-        <script type='text/javascript' src="/static/eddy_map.js"></script>
+        <script src="/static/eddy_map.js"></script>
       </div>
     </div>
       
   </div>
+
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
