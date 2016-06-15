@@ -1,13 +1,16 @@
 var mymap = L.map('mapid').setView([0, 200], 3);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw', {
-	maxZoom: 18,
-	id: 'mapbox.oceans-white'
-	//id: 'mapbox.blue-marble-topo-bathy-jul-bw'
+    maxZoom: 18,
+    id: 'mapbox.oceans-white' // White Ocean
+    //id: 'mapbox.blue-marble-topo-bathy-jul-bw' // Black Ocean
 }).addTo(mymap);
 
+
 var eddyLayer = L.geoJson.ajax()
+
 eddyLayer.addTo(mymap);
+
 
 var myStyle = {
     "color": "#000",
@@ -15,6 +18,7 @@ var myStyle = {
     "opacity": 1,
     zIndex: 10000,
 };
+
 
 var geojsonMarkerOptions = {
     radius: 4,
@@ -27,25 +31,25 @@ var geojsonMarkerOptions = {
     zIndex: -10000
 };
 
-function eddyEndpointToLayer(feature, latlng) {
-	var clickable = false
-	switch (feature.properties.name) {
-		case 'start_center':
-		    var color = "#00ddcc";
-		    clickable = true
-		    break;
-		case 'start_points':
-		    var color = "#11ffed";
-		    break;
-		case 'end_center':  
-		    var color = "#dd0080";
-		    break;
-		case 'end_points':
-		    var color = "#ff2ba6";
-		    break;
-		default:
-		    var color = "#999";
 
+function eddyEndpointToLayer(feature, latlng) {
+    var clickable = false
+    switch (feature.properties.name) {
+        case 'start_center':
+            var color = "#00ddcc";
+            clickable = true
+            break;
+        case 'start_points':
+            var color = "#11ffed";
+            break;
+        case 'end_center':  
+            var color = "#dd0080";
+            break;
+        case 'end_points':
+            var color = "#ff2ba6";
+            break;
+        default:
+            var color = "#999";
 	}
 	var cm = L.circleMarker(latlng,
 		$.extend({}, geojsonMarkerOptions, {fillColor: color, clickable: clickable}))
@@ -71,6 +75,7 @@ var eddyClicked = function(eddy_id) {
 	}
 }
 
+
 function onEachFeature(feature, layer) {
     if (feature.properties.name == 'start_center') {
 	    var out = [];
@@ -83,6 +88,7 @@ function onEachFeature(feature, layer) {
 
 
 var jsonUrl = "/eddies"
+
 
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl,
 			{style: myStyle, pointToLayer: eddyEndpointToLayer,
