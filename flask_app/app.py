@@ -1,25 +1,58 @@
+# Packages
 #!/usr/bin/env python
-from flask import Flask, jsonify, send_file, request, Response
+from bson import json_util
+from flask import Flask, jsonify, request, Response, send_file
 from flask.ext.pymongo import PyMongo
 import json
-from bson import json_util
 
+
+# Basics
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'eddies'
 mongo = PyMongo(app)
+
+
+# Collections
 #COLLECTION = 'rcs_eddies'
 COLLECTION = 'ssh_eddies'
 
 
+# Home Page
 @app.route('/')
 def index():
     return send_file('static/index.html')
+
+
+# ID
+@app.route('/id/<eddy_id>')
+def get_id(eddy_id):
+    eddy = mongo.db[COLLECTION].find_one({'_id': int(eddy_id)})
+    return jsonify(eddy)
+
+
+# Date
+@app.route('/date/<eddy_date>')
+def get_date(eddy_date):
+    eddy = mongo.db[COLLECTION].find_one({'date_start': int(eddy_id)})
+    return jsonify(eddy)
+
+
+# Duration
+@app.route('/duration/<eddy_duration>')
+def get_duration(eddy_duration):
+    eddy = mongo.db[COLLECTION].find_one({'duration': int(eddy_duration)*7})
+    return jsonify(eddy)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
 
 @app.route('/eddy/<eddy_id>')
 def get_eddy(eddy_id):
     """Full data for eddy."""
     eddy = mongo.db[COLLECTION].find_one({'_id': int(eddy_id)})
-    return jsonify(eddy)
+    return jsonify(eddy)    
+
 
 @app.route('/eddy_stream')
 def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
