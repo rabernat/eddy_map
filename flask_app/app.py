@@ -1,4 +1,4 @@
-# Packages
+# ------------------------------------------------------------------------------------- packages ----- #    works!
 #!/usr/bin/env python
 from bson import json_util
 from flask import Flask, jsonify, request, Response, send_file
@@ -6,45 +6,46 @@ from flask.ext.pymongo import PyMongo
 import json
 
 
-# Basics
+# --------------------------------------------------------------------------------------- basics ----- #    works!
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'eddies'
 mongo = PyMongo(app)
 
 
-# Collections
-#COLLECTION = 'rcs_eddies'
+# ---------------------------------------------------------------------------------- collections ----- #    works!
+# COLLECTION = 'rcs_eddies'
 COLLECTION = 'ssh_eddies'
 
 
-# Home Page
+# ----------------------------------------------------------------------------------------- home ----- #    works!
 @app.route('/')
 def index():
     return send_file('static/index.html')
 
 
-# ID
-@app.route('/id/<eddy_id>')
+# ------------------------------------------------------------------------------------------- id ----- #    works!
+@app.route('/id/<int:eddy_id>')
 def get_id(eddy_id):
-    eddy = mongo.db[COLLECTION].find_one({'_id': int(eddy_id)})
+    eddy = mongo.db[COLLECTION].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
 
-# Date
-@app.route('/date/<eddy_date>')
-def get_date(eddy_date):
-    eddy = mongo.db[COLLECTION].find_one({'date_start': int(eddy_id)})
-    return jsonify(eddy)
-
-
-# Duration
-@app.route('/duration/<eddy_duration>')
+# ------------------------------------------------------------------------------------- duration ----- #    works!
+@app.route('/duration/<int:eddy_duration>')
 def get_duration(eddy_duration):
-    eddy = mongo.db[COLLECTION].find_one({'duration': int(eddy_duration)*7})
+    eddy = mongo.db[COLLECTION].find_one({'duration': eddy_duration*7})
     return jsonify(eddy)
 
 
-# ---------------------------------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------- date ----- #
+@app.route('/date/<string:eddy_date>')
+def get_date(eddy_date):
+    return eddy_date
+#   eddy = mongo.db[COLLECTION].find_one({'id': year+month+day})
+#   return jsonify(eddy)
+
+
+# ---------------------------------------------------------------------------------------------------- #    not works below...
 
 
 @app.route('/eddy/<eddy_id>')
