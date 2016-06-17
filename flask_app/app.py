@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------------------------- packages ----- #    works!
 #!/usr/bin/env python
 from bson import json_util
+from datetime import datetime
 from flask import Flask, jsonify, request, Response, send_file
 from flask.ext.pymongo import PyMongo
 import json
@@ -23,6 +24,17 @@ def index():
     return send_file('static/index.html')
 
 
+# ------------------------------------------------------------------------------------------ all ----- #    works!
+@app.route('/all')
+def get_all():
+    data = []
+    cursor = mongo.db[COLLECTION].find()
+    for eddy in cursor:
+        data.append(eddy)
+    fc = {'type': 'FeatureCollection', 'features': data}
+    return jsonify(fc)
+
+
 # ------------------------------------------------------------------------------------------- id ----- #    works!
 @app.route('/id/<int:eddy_id>')
 def get_id(eddy_id):
@@ -30,24 +42,30 @@ def get_id(eddy_id):
     return jsonify(eddy)
 
 
+# ----------------------------------------------------------------------------------------- date ----- #    works!
+@app.route('/date/<string:eddy_date>')
+def get_date(eddy_date):
+    datestamp = datetime.strptime(eddy_date+"-12", "%Y-%m-%d-%H")
+    cursor = mongo.db[COLLECTION].find({'date_start': datestamp})
+    data = []
+    for eddy in cursor:
+        data.append(eddy)
+    fc = {'type': 'FeatureCollection', 'features': data}
+    return jsonify(fc)
+
+
 # ------------------------------------------------------------------------------------- duration ----- #    works!
 @app.route('/duration/<int:eddy_duration>')
 def get_duration(eddy_duration):
-    eddy = mongo.db[COLLECTION].find_one({'duration': eddy_duration*7})
-    return jsonify(eddy)
-
-
-# ----------------------------------------------------------------------------------------- date ----- #
-@app.route('/date/<string:eddy_date>')
-def get_date(eddy_date):
-    return eddy_date
-#   eddy = mongo.db[COLLECTION].find_one({'id': year+month+day})
-#   return jsonify(eddy)
+    cursor = mongo.db[COLLECTION].find({'duration': eddy_duration*7})
+    data = []
+    for eddy in cursor:
+        data.append(eddy)
+    fc = {'type': 'FeatureCollection', 'features': data}
+    return jsonify(fc)
 
 
 # ---------------------------------------------------------------------------------------------------- #    not works below...
-
-
 @app.route('/eddy/<eddy_id>')
 def get_eddy(eddy_id):
     """Full data for eddy."""
