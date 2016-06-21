@@ -45,8 +45,8 @@ def get_id(eddy_id):
 # ----------------------------------------------------------------------------------------- date ----- #
 @app.route('/date/<string:eddy_date>')
 def get_date(eddy_date):
-    datestamp = datetime.strptime(eddy_date+'-12', '%Y-%m-%d-%H')
-    cursor = mongo.db[COLLECTION].find({'date_start': datestamp})
+    date = datetime.strptime(eddy_date+'-12', '%Y-%m-%d-%H')
+    cursor = mongo.db[COLLECTION].find({'date_start': date})
     data = []
     for eddy in cursor:
         data.append(eddy)
