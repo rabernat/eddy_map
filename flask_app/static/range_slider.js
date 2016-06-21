@@ -1,6 +1,4 @@
-// jQRangeSlider
-
-// Date
+// ----------------------------------------------------------------------------------------- date ----- //
 $("#dateSlider").dateRangeSlider({arrows:false},
                                  {bounds:{min: new Date(1992, 9, 4), max: new Date(2012, 3, 4)}},
                                  {defaultValues:{min: new Date(1992, 9, 4), max: new Date(2012, 3, 4)}},
@@ -8,7 +6,7 @@ $("#dateSlider").dateRangeSlider({arrows:false},
                                  {step:{days:1}},
                                  {wheelMode: "scroll"/*, wheelSpeed: 1*/});
 
-// Latitude
+// ------------------------------------------------------------------------------------- latitude ----- //
 $("#slider_lat").rangeSlider({arrows:false},
                              {bounds:{min: -90, max: 90}},
                              {defaultValues:{min: -90, max: 90}},
@@ -16,7 +14,7 @@ $("#slider_lat").rangeSlider({arrows:false},
                              {step: 1},
                              {wheelMode: "scroll"/*, wheelSpeed: 1*/});
 
-// Longitude
+// ------------------------------------------------------------------------------------ longitude ----- //
 $("#slider_lon").rangeSlider({arrows:false},
                              {bounds:{min: 0, max: 360}},
                              {defaultValues:{min: 0, max: 360}},
@@ -24,7 +22,7 @@ $("#slider_lon").rangeSlider({arrows:false},
                              {step: 1},
                              {wheelMode: "scroll"/*, wheelSpeed: 1*/});
 
-// Duration
+// ------------------------------------------------------------------------------------- duration ----- //
 $("#slider_dur").rangeSlider({arrows:false},
                              {bounds:{min: 3, max: 167}},
                              {defaultValues:{min: 3, max: 167}},
