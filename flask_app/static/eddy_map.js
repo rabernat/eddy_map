@@ -1,15 +1,18 @@
-var mymap = L.map('mapid').setView([0, 180], 1);
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw', {
+// --------------------------------------------------------------------------------------- basics ----- //
+var mymap = L.map("mapid").setView([0, 180], 1);
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw", {
     maxZoom: 18,
-    id: 'mapbox.oceans-white'
-    //id: 'mapbox.blue-marble-topo-bathy-jul-bw'
+    id: "mapbox.oceans-white"
+    //id: "mapbox.blue-marble-topo-bathy-jul-bw"
 }).addTo(mymap);
 
 
+// ----------------------------------------------------------------------------------------- eddy ----- //
 var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(mymap);
 
 
+// ---------------------------------------------------------------------------------------- style ----- //
 var myStyle = {
     "color": "#000",
     "weight": 2,
@@ -18,24 +21,27 @@ var myStyle = {
 };
 
 
+// --------------------------------------------------------------------------------------- marker ----- //
 var geojsonMarkerOptions = {
-    radius: 4,
-    //fillColor: "#00ddcc",
+    stroke: false,
     color: "#000",
     weight: 1,
+    radius: 4,
     opacity: 1,
-    stroke: false,
+    fill: true,
+    //fillColor: "#00ddcc",
     fillOpacity: 0.5,
     zIndex: -10000
 };
 
 
+// ------------------------------------------------------------------------------- point-to-layer ----- //
 function eddyEndpointToLayer(feature, latlng) {
     var clickable = false;
     switch (feature.properties.name) {
         case 'start_center':
-            var color = "#00ddcc";
             clickable = true;
+            var color = "#00ddcc";          
             break;
         case 'start_points':
             var color = "#11ffed";
@@ -58,6 +64,7 @@ function eddyEndpointToLayer(feature, latlng) {
 }
 
 
+// ---------------------------------------------------------------------------------------- click ----- //
 // use a closure to pass extra arguments
 var eddyClicked = function(eddy_id) {
     return function() {
@@ -74,6 +81,7 @@ var eddyClicked = function(eddy_id) {
 };
 
 
+// ---------------------------------------------------------------------------------------- popup ----- //
 function onEachFeature(feature, layer) {
     if (feature.properties.name == 'start_center') {
         var out = [];
@@ -85,63 +93,90 @@ function onEachFeature(feature, layer) {
 }
 
 
-// --------------------------------------------------------------------------------------- format ----- //
-function format(n) {
-    return (n < 10) ? ("0" + n) : n;
-}
-
-
-// ----------------------------------------------------------------------------------------- date ----- //
-var date_min_slider = $("#dateSlider").dateRangeSlider("values").min;
-var year_min = date_min_slider.getFullYear().toString();
-var month_min = format(date_min_slider.getMonth()).toString();
-var day_min = format(date_min_slider.getDate()).toString();
-var date_min = year_min + "-" + month_min + "-" + day_min;
-var date_max_slider = $("#dateSlider").dateRangeSlider("values").max;
-var year_max = date_max_slider.getFullYear().toString();
-var month_max = format(date_max_slider.getMonth()).toString();
-var day_max = format(date_max_slider.getDate()).toString();
-var date_max = year_max + "-" + month_max + "-" + day_max;
-
-
-// ------------------------------------------------------------------------------------- latitude ----- //
-var lat_min = $("#slider_lat").rangeSlider("values").min.toString();
-var lat_max = $("#slider_lat").rangeSlider("values").max.toString();
-
-
-// ------------------------------------------------------------------------------------ longitude ----- //
-var lon_min = $("#slider_lon").rangeSlider("values").min.toString();
-var lon_max = $("#slider_lon").rangeSlider("values").max.toString();
-
-
-// ------------------------------------------------------------------------------------- duration ----- //
-var dur_min = $("#slider_dur").rangeSlider("values").min.toString();
-var dur_max = $("#slider_dur").rangeSlider("values").max.toString();
-
-
 // ------------------------------------------------------------------------------------------ url ----- //
-var jsonUrl = "/eddies" + "?date_min=" + "1992-10-13" + "&date_max=" + "2012-04-05"
-                        + "&lat_min=" + "-90" + "&lat_max=" + "90"
-                        + "&lon_min=" + "0" + "&lon_max=" + "360"
-                        + "&duration_min=" + "2" + "&duration_max=" + "168";
+var jsonUrl = "/eddies";
 
 
-// ------------------------------------------------------------------------------------------ url ----- //
-//var jsonUrl = "/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-//                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-//                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-//                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max;
-
-
+// -------------------------------------------------------------------------------------- geojson ----- //
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl,
             {style: myStyle, pointToLayer: eddyEndpointToLayer,
              onEachFeature: onEachFeature});
 geojsonLayer.addTo(mymap);
 
 
-// jQuery for chaging radio button
+// --------------------------------------------------------------------------------------- jquery ----- //
 $(document).ready(function() {
-    $('input:radio[name=duration]').change(function() {
-        geojsonLayer.refresh("/eddies?duration=" + this.value);
+    
+    // ---------------------------------------------------------------- variables ----- //
+    var date_min = String(1992) + "-" + String(10) + "-" + String(13);
+    var date_max = String(2012) + "-" + String(03) + "-" + String(15);
+    var lat_min = -91;
+    var lat_max = 91;
+    var lon_min = -1;
+    var lon_max = 361;
+    var dur_min = 2;
+    var dur_max = 138;
+    
+    // --------------------------------------------------------------------- date ----- //
+    $("#dateSlider").on("valuesChanged", function(e, data) {
+        function format(n) {
+            return (n < 10) ? ("0" + n) : n;
+        }
+        date_min_slider = data.values.min;        
+        date_min_fix = date_min_slider;
+        date_min_fix.setDate(date_min_slider.getDate()-1);
+        year_min = date_min_fix.getFullYear().toString();
+        month_min = format(date_min_fix.getMonth()+1).toString();
+        day_min = format(date_min_fix.getDate()).toString();
+        date_min = year_min + "-" + month_min + "-" + day_min;
+        date_max_slider = data.values.max;
+        date_max_fix = date_max_slider;
+        date_max_fix.setDate(date_max_slider.getDate()+1);
+        year_max = date_max_fix.getFullYear().toString();
+        month_max = format(date_max_fix.getMonth()+1).toString();
+        day_max = format(date_max_fix.getDate()).toString();
+        date_max = year_max + "-" + month_max + "-" + day_max;
+        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
+                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+    });
+
+    // ----------------------------------------------------------------- latitude ----- //
+    $("#slider_lat").on("valuesChanged", function(e, data) {
+        lat_min = (data.values.min-1).toString();
+        lat_max = (data.values.max+1).toString();
+        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
+                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+    });
+    
+    // ---------------------------------------------------------------- longitude ----- //
+    $("#slider_lon").on("valuesChanged", function(e, data) {
+        lon_min = (data.values.min-1).toString();
+        lon_max = (data.values.max+1).toString();
+        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
+                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+    });
+    
+    // ----------------------------------------------------------------- duration ----- //
+    $("#slider_dur").on("valuesChanged", function(e, data) {
+        dur_min = (data.values.min-1).toString();
+        dur_max = (data.values.max+1).toString();
+        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
+                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+    });
+ 
+    // -------------------------------------------------------------------- radio ----- //
+    $("input:radio[name=duration]").change(function() {
+        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
+                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                       + "&duration_min=" + (this.value-1) + "&duration_max=" + dur_max);
     });
 });
