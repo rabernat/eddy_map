@@ -21,45 +21,46 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:400,300,600" >
 
-    
+
   <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->    
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="/static/iThing-min.css">
   <link rel="stylesheet" href="/static/leaflet.css">
   <link rel="stylesheet" href="/static/normalize.css">
   <link rel="stylesheet" href="/static/skeleton.css">
   <link rel="stylesheet" href="/static/stylesheet.css">
-  
-  
+
+
   <!-- JS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="/static/leaflet.js"></script>
   <script src="/static/leaflet.ajax.min.js"></script>
   <script src="/static/leaflet.spin.js"></script>
   <script src="/static/jquery.min.js"></script>
   <script src="/static/jquery-ui.min.js"></script>
-  <script src="/static/spin.min.js"></script>    
-  
-  
+  <script src="/static/spin.min.js"></script>
+  <script src="/static/us-states.js"></script>
+
+
 </head>
 <body style="">
-  
-    
+
+
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">      
+  <div class="container">
     <div class="row">
-      <div class="twelve columns" style="margin-top: 10%">        
+      <div class="twelve columns" style="margin-top: 10%">
           <h1 class="header">
             <a href="http://0.0.0.0:5000">Ocean Eddy Map</a>
-          </h1>        
+          </h1>
       </div>
     </div>
 
-      
+
   <!-- jQRangeSlider
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
-    <div class="row">      
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <div class="row">
       <div class="twelve columns">
         <div id="dateSlider"></div>
         <p>Date</p>
@@ -67,27 +68,27 @@
       <div class="twelve columns">
         <div id="slider_lat"></div>
         <p>Latitude</p>
-      </div>     
+      </div>
       <div class="twelve columns">
         <div id="slider_lon"></div>
         <p>Longitude</p>
-      </div>      
+      </div>
       <div class="twelve columns">
         <div id="slider_dur"></div>
         <p>Duration</p>
-      </div>  
+      </div>
       <script src="/static/jQAllRangeSliders-min.js"></script>
       <script src="/static/jquery.mousewheel.min.js"></script>
-      <script src="/static/range_slider.js"></script>    
+      <script src="/static/range_slider.js"></script>
     </div>
     <br>
     <br>
-    
-    
+
+
 <!-- Radio Button
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->             
-    <form>        
-      <div class="row">  
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <form>
+      <div class="row">
         <div class="four columns">
           <p>Duration<p>
         </div>
@@ -114,15 +115,15 @@
             <input type="radio" name="duration" value="12">
             <span class="label-body">12 Weeks</span>
           </label>
-        </div>        
+        </div>
       </div>
-    </form> 
+    </form>
     <br>
     <br>
-    
-    
+
+
 <!-- Leaflet
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->      
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <div class="row">
       <div class="twelve columns">
         <div id="mapid" style="width: 100%; height: 500px; border: 1px solid #666;"></div>
