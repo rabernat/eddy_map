@@ -9,13 +9,19 @@ var myMap = L.map("mapid", {
 
 
 // ----------------------------------------------------------------------------------------- tile ----- //
-var tileLayer = L.tileLayer("https://api.tiles.mapbox.com/v4/{id_01}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id_01: "mapbox.oceans-white",
-    id_02: "mapbox.blue-marble-topo-bathy-jul-bw",
+var white = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
-tileLayer.addTo(myMap);
-
+var black = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    id: "mapbox.blue-marble-topo-bathy-jul-bw",
+    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
+})
+var baseMaps = {
+    "white": white,
+    "black": black
+};
+L.control.layers(baseMaps).addTo(myMap);
 
 // ----------------------------------------------------------------------------------------- eddy ----- //
 var eddyLayer = L.geoJson.ajax();
