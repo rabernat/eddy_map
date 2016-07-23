@@ -3,7 +3,7 @@ var myMap = L.map("mapid", {
     center: [0, 180],
     zoom: 1,
     minZoom: 1,
-    maxZoom: 12,
+    maxZoom: 10,
     maxBounds: [[-90, 0], [90, 360]]
 });
 
@@ -27,12 +27,13 @@ var myStyle = {
     "color": "#000000",
     "weight": 2,
     "opacity": 1,
-    zIndex: 10000,
+    zIndex: 10000
 };
 
 
 // --------------------------------------------------------------------------------------- marker ----- //
 var geojsonMarkerOptions = {
+    stroke: false,
     color: "#000000",
     weight: 1,
     radius: 4,
@@ -65,7 +66,10 @@ function eddyEndpointToLayer(feature, latlng) {
             var color = "#999999";
     }
     var cm = L.circleMarker(latlng,
-        $.extend({}, geojsonMarkerOptions, {fillColor: color, clickable: clickable}));
+        $.extend({}, geojsonMarkerOptions, {
+            fillColor: color,
+            clickable: clickable
+        }));
     if (feature.properties.eddy_id) {
         cm = cm.on("click", eddyClicked(feature.properties.eddy_id));
     }
@@ -81,12 +85,17 @@ var eddyClicked = function(eddy_id) {
         eddyUrl = "/eddy/" + eddy_id;
         myMap.removeLayer(eddyLayer);
         eddyLayer = L.geoJson.ajax(eddyUrl, {
-            style: myStyle, pointToLayer: eddyEndpointToLayer
+            style: myStyle,
+            pointToLayer: eddyEndpointToLayer
         });
         eddyLayer.setZIndex(99999);
         eddyLayer.addTo(myMap);
-        //eddyLayer.refresh(eddyUrl,
-        //    {style: myStyle, pointToLayer: eddyEndpointToLayer});
+        /*
+        eddyLayer.refresh(eddyUrl, {
+            style: myStyle,
+            pointToLayer: eddyEndpointToLayer
+        });
+        */
     };
 };
 
