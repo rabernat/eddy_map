@@ -1,31 +1,27 @@
-// ------------------------------------------------------------------------------------------ map ----- //
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– tile ––––– //
+var tileLayer_01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    id: "mapbox.oceans-white",
+    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
+})
+var tileLayer_02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    id: "mapbox.blue-marble-topo-bathy-jul-bw",
+    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
+})
+
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
 var myMap = L.map("mapid", {
     center: [0, 180],
     zoom: 1,
+    layers: tileLayer_01,
     minZoom: 1,
     maxZoom: 10,
     maxBounds: [[-90, 0], [90, 360]]
 });
-
-
-// ----------------------------------------------------------------------------------------- tile ----- //
-var white = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.oceans-white",
-    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
-})
-var black = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.blue-marble-topo-bathy-jul-bw",
-    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
-})
 var baseMaps = {
-    "white": white,
-    "black": black
-};
+    "Base Map 01": tileLayer_01,
+    "Base Map 02": tileLayer_02
+}
 L.control.layers(baseMaps).addTo(myMap);
-
-// ----------------------------------------------------------------------------------------- eddy ----- //
-var eddyLayer = L.geoJson.ajax();
-eddyLayer.addTo(myMap);
 
 
 // ---------------------------------------------------------------------------------------- style ----- //
@@ -39,13 +35,13 @@ var myStyle = {
 
 // --------------------------------------------------------------------------------------- marker ----- //
 var geojsonMarkerOptions = {
-    stroke: false,
-    color: "#000000",
-    weight: 1,
     radius: 4,
-    opacity: 1,
+    stroke: false,
+    //color: "#03f",
+    //weight: 5,
+    //opacity: 0.5,
     fill: true,
-    //fillColor: "#00ddcc",
+    //fillColor: "03f",
     fillOpacity: 0.5,
     zIndex: -10000
 };
@@ -59,19 +55,24 @@ function eddyEndpointToLayer(feature, latlng) {
             clickable = true;
             var color = "#00ddcc";
             break;
-        case "start_points":
+        case "start_polygon":
             var color = "#11ffed";
             break;
         case "end_center":
             var color = "#dd0080";
             break;
-        case "end_points":
+        case "end_polygon":
             var color = "#ff2ba6";
             break;
         default:
             var color = "#999999";
     }
     var cm = L.circleMarker(latlng,
+        $.extend({}, geojsonMarkerOptions, {
+            fillColor: color,
+            clickable: clickable
+        }));
+    var pm = L.polygon(latlng,
         $.extend({}, geojsonMarkerOptions, {
             fillColor: color,
             clickable: clickable
@@ -83,8 +84,9 @@ function eddyEndpointToLayer(feature, latlng) {
 }
 
 
-// ---------------------------------------------------------------------------------------- click ----- //
-// use a closure to pass extra arguments
+// ----------------------------------------------------------------------------------------- eddy ----- //
+var eddyLayer = L.geoJson.ajax();
+eddyLayer.addTo(myMap);
 var eddyClicked = function(eddy_id) {
     return function() {
         console.log("Show eddy details " + eddy_id);
@@ -118,11 +120,8 @@ function onEachFeature(feature, layer) {
 }
 
 
-// ------------------------------------------------------------------------------------------ url ----- //
-var jsonUrl = "/eddies";
-
-
 // -------------------------------------------------------------------------------------- geojson ----- //
+var jsonUrl = "/eddies";
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: eddyEndpointToLayer,
@@ -131,10 +130,10 @@ var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
 geojsonLayer.addTo(myMap);
 
 
-// --------------------------------------------------------------------------------------- jquery ----- //
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– jquery ––––– //
 $(document).ready(function() {
 
-    // ----------------------------------------------------------------- variable ----- //
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
     var date_min = "1992-10-13";
     var date_max = "2012-03-15";
     var lat_min = -91;
@@ -144,7 +143,7 @@ $(document).ready(function() {
     var dur_min = 2;
     var dur_max = 138;
 
-    // --------------------------------------------------------------------- date ----- //
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
     $("#dateSlider").on("valuesChanged", function(e, data) {
         var format = function(number) {
             if (number < 10) {
@@ -173,7 +172,7 @@ $(document).ready(function() {
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
-    // ----------------------------------------------------------------- latitude ----- //
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
     $("#slider_lat").on("valuesChanged", function(e, data) {
         lat_min = (data.values.min-1).toString();
         lat_max = (data.values.max+1).toString();
@@ -183,7 +182,7 @@ $(document).ready(function() {
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
-    // ---------------------------------------------------------------- longitude ----- //
+    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
     $("#slider_lon").on("valuesChanged", function(e, data) {
         lon_min = (data.values.min-1).toString();
         lon_max = (data.values.max+1).toString();
@@ -193,7 +192,7 @@ $(document).ready(function() {
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
-    // ----------------------------------------------------------------- duration ----- //
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
     $("#slider_dur").on("valuesChanged", function(e, data) {
         dur_min = (data.values.min-1).toString();
         dur_max = (data.values.max+1).toString();
@@ -203,7 +202,7 @@ $(document).ready(function() {
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
-    // -------------------------------------------------------------------- radio ----- //
+    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– radio ––––– //
     $("input:radio[name=duration]").change(function() {
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
