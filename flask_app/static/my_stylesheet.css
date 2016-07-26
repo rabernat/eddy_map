@@ -1,16 +1,16 @@
 /* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– header ––––– */
 .header {
-    color: #000000;
+    color: #666666;
 }
 .header a:link {
-    color: #000000;
+    color: #666666;
     text-decoration: none;
 }
 .header a:hover {
     color: #00ddcc !important;
 }
 .header a:visited {
-    color: #000000;
+    color: #666666;
 }
 
 
@@ -40,10 +40,24 @@ a {
 
 
 /* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– */
+
 #mapid {
     border: 1px solid #cccccc;
     border-radius: 8px;
     height: 500px;
     width: 100%;
     z-index: 10;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
+#button {
+    border: none;
+    color: #ffffff;
+    background-color: #cccccc;
+}
+#button:hover {
+    border: none;
+    color: #ffffff;
+    background-color: #00ddcc;
 }

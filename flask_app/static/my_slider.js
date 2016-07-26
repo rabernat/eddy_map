@@ -1,3 +1,18 @@
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– panel ––––– //
+$("#panelSlider").slideReveal({
+    trigger: $("#button"),
+    width: 1000,
+    push: false,
+    overlay: true,
+    //overlayColor: rgba(0,0,0,0.8),
+    //zIndex: 2000,
+    position: "right",
+    speed: 1000,
+    autoEscape: true,
+    top: 180
+});
+
+
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
 $("#dateSlider").dateRangeSlider(
     {arrows: false},

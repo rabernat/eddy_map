@@ -25,6 +25,7 @@
     <script src="/static/leaflet.ajax.js"></script>
     <script src="/static/leaflet.spin.js"></script>
     <script src="/static/jquery.js"></script>
+    <script src="/static/jquery.slidereveal.js"></script>
     <script src="/static/jquery-ui.js"></script>
     <script src="/static/spin.js"></script>
 
@@ -36,37 +37,39 @@
 
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– layout ––––– -->
     <div class="container">
-        <div class="row">
-          <div class="twelve columns" style="margin-top: 10%">
+        <div class="row" style="margin-top: 2%">
+          <div class="twelve columns">
               <h1 class="header">
                   <a href="http://0.0.0.0:5000">Ocean Eddy Map</a>
               </h1>
           </div>
         </div>
 
-    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
-        <div class="row" style="margin-top: 5%">
+    <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
+        <div class="row" style="margin-bottom: 2%">
             <div class="twelve columns">
-                <div id="dateSlider"></div>
-                <p>Date</p>
+                <div id="mapid"></div>
+                <script src="/static/my_map.js"></script>
             </div>
-            <div class="twelve columns">
+        </div>
+
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
+        <div class="row">
+            <div id="panelSlider">
+                <div id ="dateSlider"></div>
+                <p>Date</p>
                 <div id="slider_lat"></div>
                 <p>Latitude</p>
-            </div>
-            <div class="twelve columns">
                 <div id="slider_lon"></div>
                 <p>Longitude</p>
-            </div>
-            <div class="twelve columns">
                 <div id="slider_dur"></div>
                 <p>Duration</p>
             </div>
+            <button id="button">Filtering</button>
             <script src="/static/jQAllRangeSliders.js"></script>
             <script src="/static/jquery.mousewheel.js"></script>
             <script src="/static/my_slider.js"></script>
         </div>
-
 
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button –––––
         <form>
@@ -102,13 +105,6 @@
         </form>
     -->
 
-    <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
-        <div class="row" style="margin-top: 5%; margin-bottom: 5%">
-            <div class="twelve columns">
-                <div id="mapid"></div>
-                <script src="/static/my_map.js"></script>
-            </div>
-        </div>
     </div>
 
 </body>
