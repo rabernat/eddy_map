@@ -1,10 +1,10 @@
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– panel ––––– //
 $("#panelSlider").slideReveal({
     trigger: $("#button"),
-    width: 1000,
+    width: 800,
     push: false,
     overlay: true,
-    //overlayColor: rgba(0,0,0,0.8),
+    overlayColor: "rgba(0,0,0,0.8)",
     //zIndex: 2000,
     position: "right",
     speed: 1000,
