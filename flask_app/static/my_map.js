@@ -8,6 +8,7 @@ var tileLayer_02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
 
+
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
 var myMap = L.map("mapid", {
     center: [0, 180],
@@ -24,17 +25,19 @@ var baseMaps = {
 L.control.layers(baseMaps).addTo(myMap);
 
 
-// ---------------------------------------------------------------------------------------- style ----- //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– style ––––– //
 var myStyle = {
-    "color": "#000000",
+    //"stroke": true,
+    "color": "#999999",
     "weight": 2,
     "opacity": 1,
+    //"fill": depends,
+    //"fillColor": "#03f",
+    //"fillOpacity": 0.2,
+    //"clickable": true,
     zIndex: 10000
 };
-
-
-// --------------------------------------------------------------------------------------- marker ----- //
-var geojsonMarkerOptions = {
+var myGeojsonMarkerOptions = {
     radius: 4,
     stroke: false,
     //color: "#03f",
@@ -43,48 +46,63 @@ var geojsonMarkerOptions = {
     fill: true,
     //fillColor: "03f",
     fillOpacity: 0.5,
+    //clickable: true,
     zIndex: -10000
 };
 
 
-// ------------------------------------------------------------------------------- point-to-layer ----- //
-function eddyEndpointToLayer(feature, latlng) {
-    var clickable = false;
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– point ––––– //
+function myPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
         case "start_center":
-            clickable = true;
-            var color = "#00ddcc";
-            break;
-        case "start_polygon":
-            var color = "#11ffed";
+            var myClickable = true;
+            var myFillColor = "#00ddcc";
             break;
         case "end_center":
-            var color = "#dd0080";
-            break;
-        case "end_polygon":
-            var color = "#ff2ba6";
+            var myClickable = false;
+            var myFillColor = "#dd0080";
             break;
         default:
-            var color = "#999999";
+            var myClickable = false;
+            var myFillColor = "#999999";
     }
-    var cm = L.circleMarker(latlng,
-        $.extend({}, geojsonMarkerOptions, {
-            fillColor: color,
-            clickable: clickable
-        }));
-    var pm = L.polygon(latlng,
-        $.extend({}, geojsonMarkerOptions, {
-            fillColor: color,
-            clickable: clickable
+    var myCircleMarker = L.circleMarker(latlng,
+        $.extend({}, myGeojsonMarkerOptions, {
+            fillColor: myFillColor,
+            clickable: myClickable,
         }));
     if (feature.properties.eddy_id) {
-        cm = cm.on("click", eddyClicked(feature.properties.eddy_id));
+        myCircleMarker = myCircleMarker.on("click", eddyClicked(feature.properties.eddy_id));
     }
-    return cm;
+    return myCircleMarker;
 }
 
 
-// ----------------------------------------------------------------------------------------- eddy ----- //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– polygon ––––– //
+function myPolygonToLayer(feature, latlng) {
+    switch (feature.properties.name) {
+        case "start_polygon":
+            var myClickable = false;
+            var myFillColor = "#00ddcc";
+            break;
+        case "end_polygon":
+            var myClickable = false;
+            var myFillColor = "#dd0080";
+            break;
+        default:
+            var myClickable = false;
+            var myFillColor = "#999999";
+    }
+    var myPolygon = L.polygon(latlng,
+        $.extend({}, {myGeojsonMarkerOptions}, {
+            fillColor: myFillColor,
+            clickable: myClickable,
+        }));
+    return myPolygon;
+}
+
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddy ––––– //
 var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(myMap);
 var eddyClicked = function(eddy_id) {
@@ -94,23 +112,23 @@ var eddyClicked = function(eddy_id) {
         myMap.removeLayer(eddyLayer);
         eddyLayer = L.geoJson.ajax(eddyUrl, {
             style: myStyle,
-            pointToLayer: eddyEndpointToLayer
+            pointToLayer: myPointToLayer
         });
         eddyLayer.setZIndex(99999);
         eddyLayer.addTo(myMap);
         /*
         eddyLayer.refresh(eddyUrl, {
             style: myStyle,
-            pointToLayer: eddyEndpointToLayer
+            pointToLayer: myPointToLayer
         });
         */
     };
 };
 
 
-// ---------------------------------------------------------------------------------------- popup ----- //
-function onEachFeature(feature, layer) {
-    if (feature.properties.name == 'start_center') {
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
+function myOnEachFeature(feature, layer) {
+    if (feature.properties.name == "start_center") {
         var out = [];
         for (key in feature.properties) {
             out.push(key + ": " + feature.properties[key]);
@@ -120,12 +138,13 @@ function onEachFeature(feature, layer) {
 }
 
 
-// -------------------------------------------------------------------------------------- geojson ----- //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
 var jsonUrl = "/eddies";
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
-    pointToLayer: eddyEndpointToLayer,
-    onEachFeature: onEachFeature
+    pointToLayer: myPointToLayer,
+    polygonToLayer: myPolygonToLayer,
+    onEachFeature: myOnEachFeature,
 });
 geojsonLayer.addTo(myMap);
 
@@ -166,6 +185,7 @@ $(document).ready(function() {
         var month_max = format(date_max_fix.getMonth()+1)
         var day_max = format(date_max_fix.getDate())
         date_max = year_max + "-" + month_max + "-" + day_max;
+        myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
@@ -176,6 +196,7 @@ $(document).ready(function() {
     $("#slider_lat").on("valuesChanged", function(e, data) {
         lat_min = (data.values.min-1).toString();
         lat_max = (data.values.max+1).toString();
+        myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
@@ -186,6 +207,7 @@ $(document).ready(function() {
     $("#slider_lon").on("valuesChanged", function(e, data) {
         lon_min = (data.values.min-1).toString();
         lon_max = (data.values.max+1).toString();
+        myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
@@ -196,6 +218,7 @@ $(document).ready(function() {
     $("#slider_dur").on("valuesChanged", function(e, data) {
         dur_min = (data.values.min-1).toString();
         dur_max = (data.values.max+1).toString();
+        myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
@@ -204,6 +227,7 @@ $(document).ready(function() {
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– radio ––––– //
     $("input:radio[name=duration]").change(function() {
+        myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
