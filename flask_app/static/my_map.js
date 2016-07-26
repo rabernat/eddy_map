@@ -126,16 +126,29 @@ var eddyClicked = function(eddy_id) {
 };
 
 
-// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– popup ––––– //
 function myOnEachFeature(feature, layer) {
-    if (feature.properties.name == "start_center") {
+    if (feature.properties.name === "start_center") {
         var out = [];
         for (key in feature.properties) {
             out.push(key + ": " + feature.properties[key]);
         }
-        layer.bindPopup(out.join("<br />"));
+        layer.bindPopup(out.join("<br>"));
     }
 }
+
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
+var info = L.control();
+info.onAdd = function(myMap) {
+    this._div = L.DomUtil.create("div", "info");
+    this.update();
+    return this._div;
+};
+info.update = function() {
+    this._div.innerHTML = "<p>Eddy Info</p>" + "Click an eddy.";
+};
+info.addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
