@@ -72,7 +72,7 @@ def get_timeline():
 def get_point():
     data = []
     lat = float(request.args.get('lat'))
-    lon = float(request.args.get('lon'))    
+    lon = float(request.args.get('lon'))
     cursor = mongo.db[COLLECTION].find({'loc_start': {'$within': {'$center': [[lon, lat], 1]}}})
     for eddy in cursor:
         data.append(eddy)
@@ -86,8 +86,8 @@ def get_box():
     data = []
     lat_min = float(request.args.get('lat_min'))
     lat_max = float(request.args.get('lat_max'))
-    lon_min = float(request.args.get('lon_min'))   
-    lon_max = float(request.args.get('lon_max'))    
+    lon_min = float(request.args.get('lon_min'))
+    lon_max = float(request.args.get('lon_max'))
     cursor = mongo.db[COLLECTION].find({"loc_start": {"$within": {"$box": [[lon_min, lat_min], [lon_max, lat_max]]}}})
     for eddy in cursor:
         data.append(eddy)
@@ -110,7 +110,7 @@ def get_duration(eddy_duration):
 @app.route('/eddy/<int:eddy_id>')
 def get_eddy(eddy_id):
     eddy = mongo.db[COLLECTION].find_one({'_id': eddy_id})
-    return jsonify(eddy)    
+    return jsonify(eddy)
 
 
 # --------------------------------------------------------------------------------------- eddies ----- #
@@ -119,35 +119,35 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
                date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
                date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
                lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
-               duration_min=int(2), duration_max=int(168)):       
-    
-    # ----------------------------------------------------------------- timeline ----- #    
+               duration_min=int(2), duration_max=int(168)):
+
+    # ----------------------------------------------------------------- timeline ----- #
     if request.args.get('date_min'):
         date_min = datetime.strptime(str(request.args.get('date_min'))+'-12', '%Y-%m-%d-%H')
     if request.args.get('date_max'):
         date_max = datetime.strptime(str(request.args.get('date_max'))+'-12', '%Y-%m-%d-%H')
-    
+
     # ---------------------------------------------------------------------- box ----- #
     if request.args.get('lat_min'):
-        lat_min = float(request.args.get('lat_min'))    
+        lat_min = float(request.args.get('lat_min'))
     if request.args.get('lat_max'):
         lat_max = float(request.args.get('lat_max'))
     if request.args.get('lon_min'):
         lon_min = float(request.args.get('lon_min'))
     if request.args.get('lon_max'):
         lon_max = float(request.args.get('lon_max'))
-    
-    # ----------------------------------------------------------------- duration ----- #    
+
+    # ----------------------------------------------------------------- duration ----- #
     if request.args.get('duration_min'):
         duration_min = int(request.args.get('duration_min'))*7
     if request.args.get('duration_max'):
         duration_max = int(request.args.get('duration_max'))*7
-    
+
     # ------------------------------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': date_min, '$lt': date_max},
              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
              'duration': {'$gt': duration_min, '$lt': duration_max}}
-    
+
     # --------------------------------------------------------------------- json ----- #
     if full_data:
         # get all fields, overloads the browser
@@ -174,7 +174,7 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
                     })
             data.append(eddy)
         except KeyError:
-            app.logger.warning('problem parsing eddy ' + eddy['_id'])    
+            app.logger.warning('problem parsing eddy ' + eddy['_id'])
     # wrap data into a larger FeatureCollection
     fs = {'type': 'FeatureCollection', 'features': data}
     return jsonify(fs)
@@ -190,7 +190,7 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
         duration = int(request.args.get('duration'))
 
     # get everything
-    filter = {'duration': duration} 
+    filter = {'duration': duration}
 
     if full_data:
         # get all fields, overloads the browser

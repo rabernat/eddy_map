@@ -16,11 +16,11 @@ var myMap = L.map("mapid", {
     layers: tileLayer_01,
     minZoom: 1,
     maxZoom: 10,
-    maxBounds: [[-90, 0], [90, 360]]
+    maxBounds: [[-90, -180], [90, 540]]
 });
 var baseMaps = {
-    "Base Map 01": tileLayer_01,
-    "Base Map 02": tileLayer_02
+    "Map 01": tileLayer_01,
+    "Map 02": tileLayer_02
 }
 L.control.layers(baseMaps).addTo(myMap);
 
@@ -126,18 +126,6 @@ var eddyClicked = function(eddy_id) {
 };
 
 
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– popup ––––– //
-function myOnEachFeature(feature, layer) {
-    if (feature.properties.name === "start_center") {
-        var out = [];
-        for (key in feature.properties) {
-            out.push(key + ": " + feature.properties[key]);
-        }
-        layer.bindPopup(out.join("<br>"));
-    }
-}
-
-
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
 var info = L.control();
 info.onAdd = function(myMap) {
@@ -149,6 +137,25 @@ info.update = function() {
     this._div.innerHTML = "<p>Eddy Info</p>" + "Click an eddy.";
 };
 info.addTo(myMap);
+
+
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
+function eddyInfo(e, feature) {
+    info.update = function() {
+        this._div.innerHTML = "<p>Eddy ID</p>" + 1
+                            + "<p>Latitude</p>" + e.latlng.lat.toFixed(2)
+                            + "<p>Longitude</p>" + e.latlng.lng.toFixed(2);
+        }
+    info.update();
+}
+
+
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– popup ––––– //
+function myOnEachFeature(feature, layer) {
+    layer.on({
+        click: eddyInfo
+    });
+}
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
