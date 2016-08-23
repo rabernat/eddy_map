@@ -1,10 +1,10 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– tile ––––– //
 var tileLayer_01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.oceans-white",
+    id: "mapbox.blue-marble-topo-bathy-jul-bw",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
 var tileLayer_02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.blue-marble-topo-bathy-jul-bw",
+    id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
 
@@ -134,17 +134,47 @@ info.onAdd = function(myMap) {
     return this._div;
 };
 info.update = function() {
-    this._div.innerHTML = "<p>Eddy Info</p>" + "Click an eddy.";
+    this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
 };
 info.addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
-function eddyInfo(e, feature) {
+function eddyInfo(e) {
     info.update = function() {
-        this._div.innerHTML = "<p>Eddy ID</p>" + 1
-                            + "<p>Latitude</p>" + e.latlng.lat.toFixed(2)
-                            + "<p>Longitude</p>" + e.latlng.lng.toFixed(2);
+
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
+        var id_print = 215814;
+
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
+        var date_print = "2012-03-14";
+
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
+        if (e.latlng.lat > 0) {
+            var lat_print = e.latlng.lat.toFixed(2) + " N";
+        } else if (e.latlng.lat < 0) {
+            var lat_print = (- e.latlng.lat).toFixed(2) + " S";
+        } else {
+            var lat_print = e.latlng.lat.toFixed(2);
+        }
+
+        // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
+        if (e.latlng.lng < 180) {
+            var lon_print = e.latlng.lng.toFixed(2) + " E";
+        } else if (e.latlng.lng > 180) {
+            var lon_print = (360 - e.latlng.lng).toFixed(2) + " W";
+        } else {
+            var lon_print = e.latlng.lng.toFixed(2);
+        }
+
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
+        var dur_print = 167;
+
+        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + id_print + "<br>"
+                            + "<b>Date</b>" + "<br>" + date_print + "<br>"
+                            + "<b>Latitude</b>" + "<br>" + lat_print + "<br>"
+                            + "<b>Longitude</b>" + "<br>" + lon_print + "<br>"
+                            + "<b>Duration</b>" + "<br>" + dur_print + " Weeks"
         }
     info.update();
 }
@@ -186,9 +216,9 @@ $(document).ready(function() {
     $("#dateSlider").on("valuesChanged", function(e, data) {
         var format = function(number) {
             if (number < 10) {
-                return "0" + String(number)
+                return "0" + String(number);
             } else {
-                return String(number)
+                return String(number);
             }
         };
         var date_min_slider = data.values.min;
@@ -243,14 +273,5 @@ $(document).ready(function() {
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
-    });
-
-    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– radio ––––– //
-    $("input:radio[name=duration]").change(function() {
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                       + "&duration_min=" + (this.value-1) + "&duration_max=" + dur_max);
     });
 });

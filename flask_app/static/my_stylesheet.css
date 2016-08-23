@@ -1,19 +1,14 @@
-/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– padding ––––– */
-* {
-    box-sizing: content-box;
-}
-
-
 /* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
 #button {
+    background-color: #cccccc;
     border: none;
     color: #ffffff;
-    background-color: #cccccc;
+    font-family: Raleway;
 }
 #button:hover {
+    background-color: #00ddcc;
     border: none;
     color: #ffffff;
-    background-color: #00ddcc;
 }
 
 
@@ -35,20 +30,15 @@
 
 /* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– */
 .info {
-    background-color: rgba(255,255,255,0.8);;
+    background-color: rgba(255,255,255,0.8);
     border-color: #cccccc;
     border-radius: 4px;
     border-width: 1px;
     border-style: solid;
-    color: #999999;
+    color: #666666;
+    font-family: Raleway;
     font-size: 16px;
     padding: 4px 8px;
-
-}
-.info p {
-    color: #666666;
-    font-size: 20px;
-    margin: 0 0 5px;
 }
 
 
@@ -68,14 +58,20 @@ a {
 }
 
 
-/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– */
-.slider {
-    color: #ffffff;
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– padding ––––– */
+* {
+    box-sizing: content-box;
 }
 
-/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
+
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– panel ––––– */
 #panelSlider {
     color: #ffffff;
     padding-left: 10%;
     padding-right: 17.64%;
+}
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– */
+.slider {
+    color: #ffffff;
 }

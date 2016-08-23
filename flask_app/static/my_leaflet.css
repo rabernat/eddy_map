@@ -206,8 +206,11 @@
 /* general toolbar styles */
 
 .leaflet-bar {
-	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-	border-radius: 4px;
+	box-shadow: 0px 0px 0px rgba(0,0,0,0.65);
+	border-color: #cccccc;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
 	}
 .leaflet-bar a,
 .leaflet-bar a:hover {
@@ -274,14 +277,18 @@
 /* layers control */
 
 .leaflet-control-layers {
-	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
 	background: #fff;
-	border-radius: 5px;
+	border-radius: 4px;
+	font-family: Raleway;
 	}
 .leaflet-control-layers-toggle {
 	background-image: url(images/layers.png);
-	width: 36px;
+	border-color: #cccccc;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
 	height: 36px;
+	width: 36px;
 	}
 .leaflet-retina .leaflet-control-layers-toggle {
 	background-image: url(images/layers-2x.png);
@@ -300,9 +307,13 @@
 	position: relative;
 	}
 .leaflet-control-layers-expanded {
+	background: rgba(255,255,255,0.8);
+	border-color: #cccccc;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+	color: #666666;
 	padding: 6px 10px 6px 6px;
-	color: #333;
-	background: #fff;
 	}
 .leaflet-control-layers-selector {
 	margin-top: 2px;
