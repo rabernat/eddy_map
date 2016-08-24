@@ -88,7 +88,7 @@ def get_box():
     lat_max = float(request.args.get('lat_max'))
     lon_min = float(request.args.get('lon_min'))
     lon_max = float(request.args.get('lon_max'))
-    cursor = mongo.db[COLLECTION].find({"loc_start": {"$within": {"$box": [[lon_min, lat_min], [lon_max, lat_max]]}}})
+    cursor = mongo.db[COLLECTION].find({'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}}})
     for eddy in cursor:
         data.append(eddy)
     fc = {'type': 'FeatureCollection', 'features': data}
@@ -145,8 +145,8 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
 
     # ------------------------------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': date_min, '$lt': date_max},
-             'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-             'duration': {'$gt': duration_min, '$lt': duration_max}}
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
+              'duration': {'$gt': duration_min, '$lt': duration_max}}
 
     # --------------------------------------------------------------------- json ----- #
     if full_data:
@@ -157,7 +157,7 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
         # initial center
         projection = {'features': {'$slice': 1}}
     data = []
-    for eddy in mongo.db[COLLECTION].find(filter, projection):
+    for eddy in mongo.db[COLLECTION].find(filter, projection).limit(3000):
         # inject id into properties of start point
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
