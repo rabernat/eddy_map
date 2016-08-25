@@ -140,11 +140,11 @@ info.addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
-function eddyInfo(e, feature) {
+function eddyInfo(e) {
     info.update = function() {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var id_print = feature.properties.eddy_id;
+        var id_print = "215814";
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
         var date_print = "2012-03-14";
