@@ -137,6 +137,7 @@ info.update = function() {
 };
 info.addTo(myMap);
 
+
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
 function eddyInfo(e) {
     info.update = function() {

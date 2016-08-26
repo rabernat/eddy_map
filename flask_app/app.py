@@ -170,14 +170,14 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
                     'geometry': {
                         'type': 'LineString',
                         'coordinates': [start_pt, end_pt]
-                        }
-                    })
+                    }
+                })
             data.append(eddy)
         except KeyError:
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
     # wrap data into a larger FeatureCollection
-    fs = {'type': 'FeatureCollection', 'features': data}
-    return jsonify(fs)
+    fc = {'type': 'FeatureCollection', 'features': data}
+    return jsonify(fc)
 
 
 # ----------------------------------------------------------------------------------------- test ----- #
