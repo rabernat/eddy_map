@@ -117,7 +117,7 @@ var eddyClicked = function(eddy_id) {
         eddyUrl = "/eddy/" + eddy_id;
         eddyLayer = L.geoJson.ajax(eddyUrl, {
             style: myStyle,
-            pointToLayer: myPointToLayer
+            pointToLayer: myPointToLayer,
         });
         eddyLayer.setZIndex(99999);
         eddyLayer.addTo(myMap);
@@ -191,7 +191,6 @@ var jsonUrl = "/eddies";
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: myPointToLayer,
-    polygonToLayer: myPolygonToLayer,
     onEachFeature: myOnEachFeature
 });
 geojsonLayer.addTo(myMap);
