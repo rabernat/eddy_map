@@ -1,10 +1,14 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– tile ––––– //
 var tileLayer_01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.blue-marble-topo-bathy-jul-bw",
+    id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
 var tileLayer_02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    id: "mapbox.oceans-white",
+    id: "mapbox.blue-marble-topo-bathy-jul-bw",
+    accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
+})
+var tileLayer_03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    id: "mapbox.satellite",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
 
@@ -20,7 +24,8 @@ var myMap = L.map("mapid", {
 });
 var baseMaps = {
     "Map 01": tileLayer_01,
-    "Map 02": tileLayer_02
+    "Map 02": tileLayer_02,
+    "Map 03": tileLayer_03,
 }
 L.control.layers(baseMaps).addTo(myMap);
 
@@ -66,11 +71,10 @@ function myPointToLayer(feature, latlng) {
             var myClickable = false;
             var myFillColor = "#999999";
     }
-    var myCircleMarker = L.circleMarker(latlng,
-        $.extend({}, myGeojsonMarkerOptions, {
-            fillColor: myFillColor,
-            clickable: myClickable,
-        }));
+    var myCircleMarker = L.circleMarker(latlng, $.extend({}, myGeojsonMarkerOptions, {
+        fillColor: myFillColor,
+        clickable: myClickable
+    }));
     if (feature.properties.eddy_id) {
         myCircleMarker = myCircleMarker.on("click", eddyClicked(feature.properties.eddy_id));
     }
@@ -93,11 +97,13 @@ function myPolygonToLayer(feature, latlng) {
             var myClickable = false;
             var myFillColor = "#999999";
     }
-    var myPolygon = L.polygon(latlng,
-        $.extend({}, {myGeojsonMarkerOptions}, {
-            fillColor: myFillColor,
-            clickable: myClickable,
-        }));
+    var myPolygon = L.polygon(latlng, $.extend({}, {myGeojsonMarkerOptions}, {
+        fillColor: myFillColor,
+        clickable: myClickable
+    }));
+    if (feature.properties.eddy_id) {
+        myPolygon = myPolygon.on("click", eddyClicked(feature.properties.eddy_id));
+    }
     return myPolygon;
 }
 
@@ -107,21 +113,14 @@ var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(myMap);
 var eddyClicked = function(eddy_id) {
     return function() {
-        console.log("Show eddy details " + eddy_id);
-        eddyUrl = "/eddy/" + eddy_id;
         myMap.removeLayer(eddyLayer);
+        eddyUrl = "/eddy/" + eddy_id;
         eddyLayer = L.geoJson.ajax(eddyUrl, {
             style: myStyle,
             pointToLayer: myPointToLayer
         });
         eddyLayer.setZIndex(99999);
         eddyLayer.addTo(myMap);
-        /*
-        eddyLayer.refresh(eddyUrl, {
-            style: myStyle,
-            pointToLayer: myPointToLayer
-        });
-        */
     };
 };
 
@@ -138,8 +137,7 @@ info.update = function() {
 };
 info.addTo(myMap);
 
-
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
 function eddyInfo(e) {
     info.update = function() {
 
@@ -180,7 +178,7 @@ function eddyInfo(e) {
 }
 
 
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
 function myOnEachFeature(feature, layer) {
     layer.on({
         click: eddyInfo
@@ -194,7 +192,7 @@ var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: myPointToLayer,
     polygonToLayer: myPolygonToLayer,
-    onEachFeature: myOnEachFeature,
+    onEachFeature: myOnEachFeature
 });
 geojsonLayer.addTo(myMap);
 
