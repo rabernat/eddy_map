@@ -61,10 +61,18 @@ function myPointToLayer(feature, latlng) {
             var myClickable = true;
             var myFillColor = "#00ddcc";
             break;
+        case "start_points":
+            var myClickable = false;
+    		var myFillColor = "#11ffed";
+    		break;
         case "end_center":
             var myClickable = false;
             var myFillColor = "#dd0080";
             break;
+        case 'end_points':
+            var myClickable = false;
+    		var myFillColor = "#ff2ba6";
+    		break;
         default:
             var myClickable = false;
             var myFillColor = "#999999";
