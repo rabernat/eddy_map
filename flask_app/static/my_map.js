@@ -41,7 +41,6 @@ var myStyle = {
     //"fillOpacity": 0.2,
     //"clickable": true
 };
-myStyle.zIndex = 10;
 var myGeojsonMarkerOptions = {
     radius: 4,
     stroke: false,
@@ -53,7 +52,6 @@ var myGeojsonMarkerOptions = {
     fillOpacity: 0.5,
     //clickable: true
 };
-myGeojsonMarkerOptions.zIndex = 20;
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– point ––––– //
 function myPointToLayer(feature, latlng) {
@@ -70,7 +68,7 @@ function myPointToLayer(feature, latlng) {
             var myClickable = false;
             var myFillColor = "#dd0080";
             break;
-        case 'end_points':
+        case "end_points":
             var myClickable = false;
     		var myFillColor = "#ff2ba6";
     		break;
@@ -146,11 +144,11 @@ info.addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
-function eddyInfo(e) {
+function eddyInfo(e, id) {
     info.update = function() {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var id_print = "215814";
+        var id_print = id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
         var date_print = "2012-03-14";
@@ -189,7 +187,7 @@ function eddyInfo(e) {
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
 function myOnEachFeature(feature, layer) {
     layer.on({
-        click: eddyInfo
+        click: eddyInfo(e, feature.properties.eddy_id)
     });
 }
 
