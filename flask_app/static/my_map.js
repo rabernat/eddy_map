@@ -41,6 +41,7 @@ var myStyle = {
     //"fillOpacity": 0.2,
     //"clickable": true
 };
+myStyle.zIndex = 20;
 var myGeojsonMarkerOptions = {
     radius: 4,
     stroke: false,
@@ -52,7 +53,7 @@ var myGeojsonMarkerOptions = {
     fillOpacity: 0.5,
     //clickable: true
 };
-
+myGeojsonMarkerOptions.zIndex = 10;
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– point ––––– //
 function myPointToLayer(feature, latlng) {
@@ -117,7 +118,6 @@ function myPolygonToLayer(feature, latlng) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddy ––––– //
 var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(myMap);
-eddyLayer.bringToFront();
 var eddy = "/rcs_eddy";
 var eddyClicked = function(eddy_id) {
     return function() {
@@ -128,7 +128,6 @@ var eddyClicked = function(eddy_id) {
             pointToLayer: myPointToLayer,
         });
         eddyLayer.addTo(myMap);
-        eddyLayer.bringToFront();
     };
 };
 
