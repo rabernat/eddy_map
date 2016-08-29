@@ -186,7 +186,7 @@ function myOnEachFeature(feature, layer) {
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
-var jsonUrl = "/eddies_ssh";
+var jsonUrl = "/ssh_eddies";
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: myPointToLayer,
@@ -232,7 +232,7 @@ $(document).ready(function() {
         var day_max = format(date_max_fix.getDate())
         date_max = year_max + "-" + month_max + "-" + day_max;
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/eddies_rcs" + "?date_min=" + date_min + "&date_max=" + date_max
+        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
@@ -243,7 +243,7 @@ $(document).ready(function() {
         lat_min = (data.values.min-1).toString();
         lat_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/eddies_rcs" + "?date_min=" + date_min + "&date_max=" + date_max
+        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
@@ -254,7 +254,7 @@ $(document).ready(function() {
         lon_min = (data.values.min-1).toString();
         lon_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/eddies_rcs" + "?date_min=" + date_min + "&date_max=" + date_max
+        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
@@ -265,7 +265,7 @@ $(document).ready(function() {
         dur_min = (data.values.min-1).toString();
         dur_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/eddies_rcs" + "?date_min=" + date_min + "&date_max=" + date_max
+        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
                                        + "&lat_min=" + lat_min + "&lat_max=" + lat_max
                                        + "&lon_min=" + lon_min + "&lon_max=" + lon_max
                                        + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
