@@ -41,7 +41,7 @@ var myStyle = {
     //"fillOpacity": 0.2,
     //"clickable": true
 };
-myStyle.zIndex = 20;
+myStyle.zIndex = 10;
 var myGeojsonMarkerOptions = {
     radius: 4,
     stroke: false,
@@ -53,7 +53,7 @@ var myGeojsonMarkerOptions = {
     fillOpacity: 0.5,
     //clickable: true
 };
-myGeojsonMarkerOptions.zIndex = 10;
+myGeojsonMarkerOptions.zIndex = 20;
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– point ––––– //
 function myPointToLayer(feature, latlng) {
