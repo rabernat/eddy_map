@@ -117,6 +117,7 @@ function myPolygonToLayer(feature, latlng) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddy ––––– //
 var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(myMap);
+eddyLayer.bringToFront();
 var eddy = "/rcs_eddy";
 var eddyClicked = function(eddy_id) {
     return function() {
@@ -126,8 +127,8 @@ var eddyClicked = function(eddy_id) {
             style: myStyle,
             pointToLayer: myPointToLayer,
         });
-        eddyLayer.setZIndex(99999);
         eddyLayer.addTo(myMap);
+        eddyLayer.bringToFront();
     };
 };
 
