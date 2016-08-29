@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– css ––––– -->
+    <link rel="stylesheet" href="/static/bootstrap.css">
+    <link rel="stylesheet" href="/static/bootstrap-switch.css">
     <link rel="stylesheet" href="/static/my_leaflet.css">
     <link rel="stylesheet" href="/static/my_iThing.css">
     <link rel="stylesheet" href="/static/my_stylesheet.css">
@@ -21,6 +23,7 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:400,300,600" >
 
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– js ––––– -->
+    <script src="/static/bootstrap-switch.js"></script>
     <script src="/static/leaflet.js"></script>
     <script src="/static/leaflet.ajax.js"></script>
     <script src="/static/leaflet.spin.js"></script>
@@ -46,25 +49,10 @@
         </div>
 
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– collection ––––– -->
-        <div class="row" style="margin-bottom: 2%">
-            <div class="three columns">
-                <p>Data Selection</p>
-            </div>
-            <form>
-                <div class="three columns">
-                    <label>
-                        <input type="radio" name="collection" value="COLLECTION_01">
-                        <span class="label-body">RCS</span>
-                    </label>
-                </div>
-                <div class="three column">
-                    <label>
-                        <input type="radio" name="collection" value="COLLECTION_02">
-                        <span class="label-body">SSH</span>
-                    </label>
-                </div>
-            </form>
+        <div class="row" style="margin-top: 2%">
+            <input type="checkbox" name="my-checkbox" checked>
         </div>
+
     <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
         <div class="row" style="margin-bottom: 2%">
             <div class="twelve columns">

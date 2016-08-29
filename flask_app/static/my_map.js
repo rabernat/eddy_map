@@ -112,7 +112,7 @@ eddyLayer.addTo(myMap);
 var eddyClicked = function(eddy_id) {
     return function() {
         myMap.removeLayer(eddyLayer);
-        eddyUrl = "/eddy_rcs/" + eddy_id;
+        eddyUrl = "/eddy_ssh/" + eddy_id;
         eddyLayer = L.geoJson.ajax(eddyUrl, {
             style: myStyle,
             pointToLayer: myPointToLayer,
@@ -186,7 +186,7 @@ function myOnEachFeature(feature, layer) {
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
-var jsonUrl = "/eddies_rcs";
+var jsonUrl = "/eddies_ssh";
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: myPointToLayer,

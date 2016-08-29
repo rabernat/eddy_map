@@ -27,15 +27,14 @@ def index():
 # ------------------------------------------------------------------------------------------ rcs ----- #
 
 # --------------------------------------------------------------------- eddy ----- #
-
-@app.route('/eddy_rcs/<int:eddy_id>')
-def get_eddy(eddy_id):
+@app.route('/rcs_eddy/<int:eddy_id>')
+def get_rcs_eddy(eddy_id):
     eddy = mongo.db[COLLECTION_01].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
 # ------------------------------------------------------------------- eddies ----- #
-@app.route('/eddies_rcs')
-def get_eddies(full_data=False, add_mean_trajectory=False,
+@app.route('/rcs_eddies')
+def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
                date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
                date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
                lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
@@ -103,14 +102,14 @@ def get_eddies(full_data=False, add_mean_trajectory=False,
 # ------------------------------------------------------------------------------------------ ssh ----- #
 
 # --------------------------------------------------------------------- eddy ----- #
-@app.route('/eddy_ssh/<int:eddy_id>')
-def get_eddy(eddy_id):
+@app.route('/ssh_eddy/<int:eddy_id>')
+def get_ssh_eddy(eddy_id):
     eddy = mongo.db[COLLECTION_02].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
 # ------------------------------------------------------------------- eddies ----- #
-@app.route('/eddies_ssh')
-def get_eddies(full_data=False, add_mean_trajectory=False,
+@app.route('/ssh_eddies')
+def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
                date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
                date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
                lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
