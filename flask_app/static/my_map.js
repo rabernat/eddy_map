@@ -144,7 +144,7 @@ info.addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
-function eddyInfo(e, id) {
+function eddyInfo(e) {
     info.update = function() {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
@@ -187,7 +187,7 @@ function eddyInfo(e, id) {
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– interaction ––––– //
 function myOnEachFeature(feature, layer) {
     layer.on({
-        click: eddyInfo(e, feature.properties.eddy_id)
+        click: eddyInfo
     });
 }
 
