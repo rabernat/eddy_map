@@ -226,10 +226,7 @@ $(document).ready(function() {
             eddies = "/ssh_eddies";
         }
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
-                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        geojsonLayer.refresh(eddies);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
