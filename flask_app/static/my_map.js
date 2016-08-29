@@ -212,14 +212,20 @@ $(document).ready(function() {
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– switch ––––– //
     $("input[name='collection']").on("switchChange.bootstrapSwitch", function(event, state) {
-        if (state.value = true) {
+        if (state === true) {
             eddy = "/rcs_eddy";
             eddies = "/rcs_eddies";
-        } else if (state.value = false) {
+        } else if (state === false) {
             eddy = "/ssh_eddy";
             eddies = "/ssh_eddies";
         }
+        myMap.removeLayer(eddyLayer);
+        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
+                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
+
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
     $("#dateSlider").on("valuesChanged", function(e, data) {
         var format = function(number) {
