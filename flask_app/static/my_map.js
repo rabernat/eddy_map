@@ -109,10 +109,11 @@ function myPolygonToLayer(feature, latlng) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddy ––––– //
 var eddyLayer = L.geoJson.ajax();
 eddyLayer.addTo(myMap);
+var eddy = "/rcs_eddy";
 var eddyClicked = function(eddy_id) {
     return function() {
         myMap.removeLayer(eddyLayer);
-        eddyUrl = "/eddy_ssh/" + eddy_id;
+        eddyUrl = eddy + eddy_id;
         eddyLayer = L.geoJson.ajax(eddyUrl, {
             style: myStyle,
             pointToLayer: myPointToLayer,
@@ -186,7 +187,8 @@ function myOnEachFeature(feature, layer) {
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
-var jsonUrl = "/ssh_eddies";
+var eddies = "/rcs_eddies";
+var jsonUrl = eddies;
 var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
     style: myStyle,
     pointToLayer: myPointToLayer,
@@ -208,6 +210,16 @@ $(document).ready(function() {
     var dur_min = 2;
     var dur_max = 138;
 
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– switch ––––– //
+    $("input[name='collection']").on("switchChange.bootstrapSwitch", function(event, state) {
+        if (state.value = true) {
+            eddy = "/rcs_eddy";
+            eddies = "/rcs_eddies";
+        } else if (state.value = false) {
+            eddy = "/ssh_eddy";
+            eddies = "/ssh_eddies";
+        }
+    });
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
     $("#dateSlider").on("valuesChanged", function(e, data) {
         var format = function(number) {
@@ -232,10 +244,10 @@ $(document).ready(function() {
         var day_max = format(date_max_fix.getDate())
         date_max = year_max + "-" + month_max + "-" + day_max;
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
+                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
@@ -243,10 +255,10 @@ $(document).ready(function() {
         lat_min = (data.values.min-1).toString();
         lat_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
+                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
@@ -254,10 +266,10 @@ $(document).ready(function() {
         lon_min = (data.values.min-1).toString();
         lon_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
+                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
@@ -265,9 +277,9 @@ $(document).ready(function() {
         dur_min = (data.values.min-1).toString();
         dur_max = (data.values.max+1).toString();
         myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh("/ssh_eddies" + "?date_min=" + date_min + "&date_max=" + date_max
-                                       + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                       + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                       + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
+                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
+                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
+                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
     });
 });
