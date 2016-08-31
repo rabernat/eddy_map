@@ -161,7 +161,7 @@ function eddyInfo(e) {
         var end_date_print = end_month + " " + end_day + ", " + end_year;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var duration_print = props.eddy_duration/7;
+        var duration_print = Math.round(props.eddy_duration/7);
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
