@@ -240,7 +240,8 @@ $(document).ready(function() {
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        }
+        };
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies);
     });
@@ -270,7 +271,8 @@ $(document).ready(function() {
         date_max = year_max + "-" + month_max + "-" + day_max;
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        }
+        };
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -284,7 +286,8 @@ $(document).ready(function() {
         lat_max = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        }
+        };
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -298,7 +301,8 @@ $(document).ready(function() {
         lon_max = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        }
+        };
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -312,7 +316,8 @@ $(document).ready(function() {
         dur_max = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        }
+        };
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
