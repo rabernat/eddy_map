@@ -1,4 +1,4 @@
-# ------------------------------------------------------------------------------------- packages ----- #
+# -------------------------------------------------------------------------------------- imports ----- #
 #!/usr/bin/env python
 from bson import json_util
 from datetime import datetime
@@ -13,7 +13,7 @@ app.config['MONGO_DBNAME'] = 'eddies'
 mongo = PyMongo(app)
 
 
-# ----------------------------------------------------------------------------------- collection ----- #
+# ----------------------------------------------------------------------------------------- data ----- #
 COLLECTION_01 = 'rcs_eddies'
 COLLECTION_02 = 'ssh_eddies'
 
@@ -35,10 +35,10 @@ def get_rcs_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/rcs_eddies')
 def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
-               date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-               date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-               lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
-               duration_min=int(2), duration_max=int(168)):
+                   date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                   date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+                   lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
+                   duration_min=int(2), duration_max=int(168)):
 
     # --------------------------------------------- timeline ----- #
     if request.args.get('date_min'):
@@ -67,19 +67,21 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
               'duration': {'$gt': duration_min, '$lt': duration_max}}
 
-    # ------------------------------------------------- json ----- #
+    # ------------------------------------------------ slice ----- #
     if full_data:
-        # get all fields, overloads the browser
-        projection = None
+        projection = None # all
     else:
-        # just get the first feature
-        # initial center
-        projection = {'features': {'$slice': 1}}
+        projection = {'features': {'$slice': 1}} # start center
+
+    # ----------------------------------------------- inject ----- #
     data = []
     for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(3000):
-        # inject id into properties of start point
         try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
+            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
+            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
+            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
+            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
             if add_mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
@@ -94,7 +96,8 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
             data.append(eddy)
         except KeyError:
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
-    # wrap data into a larger FeatureCollection
+
+    # ------------------------------------------------- wrap ----- #
     fc = {'type': 'FeatureCollection', 'features': data}
     return jsonify(fc)
 
@@ -110,10 +113,10 @@ def get_ssh_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/ssh_eddies')
 def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
-               date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-               date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-               lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
-               duration_min=int(2), duration_max=int(168)):
+                   date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                   date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+                   lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
+                   duration_min=int(2), duration_max=int(168)):
 
     # --------------------------------------------- timeline ----- #
     if request.args.get('date_min'):
@@ -142,19 +145,21 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
               'duration': {'$gt': duration_min, '$lt': duration_max}}
 
-    # ------------------------------------------------- json ----- #
+    # ------------------------------------------------ slice ----- #
     if full_data:
-        # get all fields, overloads the browser
-        projection = None
+        projection = None # all
     else:
-        # just get the first feature
-        # initial center
-        projection = {'features': {'$slice': 1}}
+        projection = {'features': {'$slice': 1}} # start center
+
+    # ----------------------------------------------- inject ----- #
     data = []
     for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
-        # inject id into properties of start point
         try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
+            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
+            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
+            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
+            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
             if add_mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
@@ -169,7 +174,8 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
             data.append(eddy)
         except KeyError:
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
-    # wrap data into a larger FeatureCollection
+
+    # ------------------------------------------------- wrap ----- #
     fc = {'type': 'FeatureCollection', 'features': data}
     return jsonify(fc)
 

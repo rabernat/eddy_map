@@ -145,42 +145,55 @@ info.addTo(myMap);
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– click ––––– //
 function eddyInfo(e) {
-    info.update = function() {
+    info.update = function(props) {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var id_print = "215814";
+        var id_print = props.eddy_id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
-        var date_print = "2012-03-14";
+        var start_day = props.eddy_start_date.substring(5, 7);
+        var start_month = props.eddy_start_date.substring(8, 11);
+        var start_year = props.eddy_start_date.substring(12, 16);
+        var start_date_print = start_month + " " + start_day + ", " + start_year;
+        var end_day = props.eddy_end_date.substring(5, 7);
+        var end_month = props.eddy_end_date.substring(8, 11);
+        var end_year = props.eddy_end_date.substring(12, 16);
+        var end_date_print = end_month + " " + end_day + ", " + end_year;
+
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
+        var duration_print = props.eddy_duration;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
-            var lat_print = e.latlng.lat.toFixed(2) + " N";
+            var latitude_print = e.latlng.lat.toFixed(2) + " N";
         } else if (e.latlng.lat < 0) {
-            var lat_print = (- e.latlng.lat).toFixed(2) + " S";
+            var latitude_print = (- e.latlng.lat).toFixed(2) + " S";
         } else {
-            var lat_print = e.latlng.lat.toFixed(2);
+            var latitude_print = e.latlng.lat.toFixed(2);
         }
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
         if (e.latlng.lng < 180) {
-            var lon_print = e.latlng.lng.toFixed(2) + " E";
+            var longitude_print = e.latlng.lng.toFixed(2) + " E";
         } else if (e.latlng.lng > 180) {
-            var lon_print = (360 - e.latlng.lng).toFixed(2) + " W";
+            var longitude_print = (360 - e.latlng.lng).toFixed(2) + " W";
         } else {
-            var lon_print = e.latlng.lng.toFixed(2);
+            var longitude_print = e.latlng.lng.toFixed(2);
         }
 
-        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var dur_print = 167;
+        // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
+        var mean_area_print = (props.eddy_mean_area/10**9).toFixed(2);
 
+        // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
         this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + id_print + "<br>"
-                            + "<b>Date</b>" + "<br>" + date_print + "<br>"
-                            + "<b>Latitude</b>" + "<br>" + lat_print + "<br>"
-                            + "<b>Longitude</b>" + "<br>" + lon_print + "<br>"
-                            + "<b>Duration</b>" + "<br>" + dur_print + " Weeks"
+                            + "<b>Start Date</b>" + "<br>" + start_date_print + "<br>"
+                            + "<b>End Date</b>" + "<br>" + end_date_print + "<br>"
+                            + "<b>Duration</b>" + "<br>" + duration_print + " weeks" + "<br>"
+                            + "<b>Latitude</b>" + "<br>" + latitude_print + "<br>"
+                            + "<b>Longitude</b>" + "<br>" + longitude_print + "<br>"
+                            + "<b>Mean Area</b>" + "<br>" + mean_area_print + " km" + "<sup>2</sup>";
         }
-    info.update();
+    info.update(e.target.feature.properties);
 }
 
 
@@ -242,15 +255,15 @@ $(document).ready(function() {
         var date_min_fix = date_min_slider;
         date_min_fix.setDate(date_min_slider.getDate()-1);
         var year_min = date_min_fix.getFullYear().toString();
-        var month_min = format(date_min_fix.getMonth()+1)
-        var day_min = format(date_min_fix.getDate())
+        var month_min = format(date_min_fix.getMonth()+1);
+        var day_min = format(date_min_fix.getDate());
         date_min = year_min + "-" + month_min + "-" + day_min;
         var date_max_slider = data.values.max;
         var date_max_fix = date_max_slider;
         date_max_fix.setDate(date_max_slider.getDate()+1);
         var year_max = date_max_fix.getFullYear().toString();
         var month_max = format(date_max_fix.getMonth()+1)
-        var day_max = format(date_max_fix.getDate())
+        var day_max = format(date_max_fix.getDate());
         date_max = year_max + "-" + month_max + "-" + day_max;
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
