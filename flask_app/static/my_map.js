@@ -238,6 +238,7 @@ $(document).ready(function() {
             eddy = "/ssh_eddy";
             eddies = "/ssh_eddies";
         }
+        info.update();
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies);
     });
