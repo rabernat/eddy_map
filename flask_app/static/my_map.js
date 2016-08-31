@@ -238,7 +238,8 @@ $(document).ready(function() {
             eddy = "/ssh_eddy";
             eddies = "/ssh_eddies";
         }
-        info.update();
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies);
     });
@@ -266,6 +267,8 @@ $(document).ready(function() {
         var month_max = format(date_max_fix.getMonth()+1)
         var day_max = format(date_max_fix.getDate());
         date_max = year_max + "-" + month_max + "-" + day_max;
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -277,6 +280,8 @@ $(document).ready(function() {
     $("#slider_lat").on("valuesChanged", function(e, data) {
         lat_min = (data.values.min-1).toString();
         lat_max = (data.values.max+1).toString();
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -288,6 +293,8 @@ $(document).ready(function() {
     $("#slider_lon").on("valuesChanged", function(e, data) {
         lon_min = (data.values.min-1).toString();
         lon_max = (data.values.max+1).toString();
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
@@ -299,6 +306,8 @@ $(document).ready(function() {
     $("#slider_dur").on("valuesChanged", function(e, data) {
         dur_min = (data.values.min-1).toString();
         dur_max = (data.values.max+1).toString();
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         myMap.removeLayer(eddyLayer);
         geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
                                     + "&lat_min=" + lat_min + "&lat_max=" + lat_max
