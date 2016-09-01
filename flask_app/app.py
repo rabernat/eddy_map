@@ -27,7 +27,7 @@ def index():
 # ------------------------------------------------------------------------------------------ rcs ----- #
 
 # --------------------------------------------------------------------- eddy ----- #
-@app.route('/rcs_eddy/<int:eddy_id>')
+@app.route('/rcs_eddy/<string:eddy_id>')
 def get_rcs_eddy(eddy_id):
     eddy = mongo.db[COLLECTION_01].find_one({'_id': eddy_id})
     return jsonify(eddy)

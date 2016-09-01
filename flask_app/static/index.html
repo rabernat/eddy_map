@@ -49,11 +49,32 @@
 
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– collection ––––– -->
         <div class="row" style="margin-top: 2%">
-            <form>
-                <input type="checkbox" name="collection" checked>
-                <script src="/static/bootstrap-switch.js"></script>
-                <script src="/static/my_switch.js"></script>
-            </form>
+            <div class="ten columns">
+                <form>
+                    <input type="checkbox" name="collection" checked>
+                    <script src="/static/bootstrap-switch.js"></script>
+                    <script src="/static/my_switch.js"></script>
+                </form>
+            </div>
+
+
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
+            <div class="two columns">
+                <div id="panelSlider">
+                    <div id ="dateSlider"></div>
+                    <p>Date</p>
+                    <div id="slider_lat"></div>
+                    <p>Latitude</p>
+                    <div id="slider_lon"></div>
+                    <p>Longitude</p>
+                    <div id="slider_dur"></div>
+                    <p>Duration</p>
+                </div>
+                <button id="button">filtering</button>
+                <script src="/static/jQAllRangeSliders.js"></script>
+                <script src="/static/jquery.mousewheel.js"></script>
+                <script src="/static/my_slider.js"></script>
+            </div>
         </div>
 
     <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
@@ -62,24 +83,6 @@
                 <div id="mapid"></div>
                 <script src="/static/my_map.js"></script>
             </div>
-        </div>
-
-    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
-        <div class="row">
-            <div id="panelSlider">
-                <div id ="dateSlider"></div>
-                <p>Date</p>
-                <div id="slider_lat"></div>
-                <p>Latitude</p>
-                <div id="slider_lon"></div>
-                <p>Longitude</p>
-                <div id="slider_dur"></div>
-                <p>Duration</p>
-            </div>
-            <button id="button">filtering</button>
-            <script src="/static/jQAllRangeSliders.js"></script>
-            <script src="/static/jquery.mousewheel.js"></script>
-            <script src="/static/my_slider.js"></script>
         </div>
     </div>
 
