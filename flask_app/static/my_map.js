@@ -61,7 +61,7 @@ function rcsPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
         case "start_center":
             var myClickable = true;
-            var myFillColor = "#0066ff";
+            var myFillColor = "#0099ff";
             break;
         case "start_points":
             var myClickable = false;
@@ -94,7 +94,7 @@ function sshPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
         case "start_center":
             var myClickable = true;
-            var myFillColor = "#ff00ff";
+            var myFillColor = "#ff33ff";
             break;
         case "end_center":
             var myClickable = false;
