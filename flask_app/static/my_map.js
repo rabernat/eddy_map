@@ -125,7 +125,7 @@ var rcsEddyClicked = function(eddyId) {
     return function() {
         myMap.removeLayer(rcsEddyLayer);
         rcsEddyUrl = rcsEddy + "/" + eddyId;
-        eddyLayer = L.geoJson.ajax(rcsEddyUrl, {
+        rcsEddyLayer = L.geoJson.ajax(rcsEddyUrl, {
             style: myStyle,
             pointToLayer: rcsPointToLayer
         });
