@@ -98,7 +98,7 @@ function sshPointToLayer(feature, latlng) {
             break;
         case "end_center":
             var myClickable = false;
-            var myFillColor = "c8f661";
+            var myFillColor = "#538edf";
             break;
         default:
             var myClickable = false;
