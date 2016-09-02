@@ -35,37 +35,41 @@ def get_rcs_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/rcs_eddies')
 def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
-                   date_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                   date_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-                   lat_min=float(-91), lat_max=float(91), lon_min=float(-1), lon_max=float(361),
-                   duration_min=int(2), duration_max=int(168)):
+                   dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                   dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+                   lat_min=float(-91), lat_max=float(91),
+                   lon_min=float(-1), lon_max=float(361),
+                   dur_min=int(2), dur_max=int(168)):
 
-    # --------------------------------------------- timeline ----- #
-    if request.args.get('date_min'):
-        date_min = datetime.strptime(str(request.args.get('date_min'))+'-12', '%Y-%m-%d-%H')
-    if request.args.get('date_max'):
-        date_max = datetime.strptime(str(request.args.get('date_max'))+'-12', '%Y-%m-%d-%H')
+    # ------------------------------------------------- date ----- #
+    if request.args.get('dat_min'):
+        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
+    if request.args.get('dat_max'):
+        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
 
-    # -------------------------------------------------- box ----- #
+    # --------------------------------------------- latitude ----- #
+
     if request.args.get('lat_min'):
         lat_min = float(request.args.get('lat_min'))
     if request.args.get('lat_max'):
         lat_max = float(request.args.get('lat_max'))
+
+    # -------------------------------------------- longitude ----- #
     if request.args.get('lon_min'):
         lon_min = float(request.args.get('lon_min'))
     if request.args.get('lon_max'):
         lon_max = float(request.args.get('lon_max'))
 
     # --------------------------------------------- duration ----- #
-    if request.args.get('duration_min'):
-        duration_min = int(request.args.get('duration_min'))*7
-    if request.args.get('duration_max'):
-        duration_max = int(request.args.get('duration_max'))*7
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
 
     # ----------------------------------------------- filter ----- #
-    filter = {'date_start': {'$gt': date_min, '$lt': date_max},
+    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-              'duration': {'$gt': duration_min, '$lt': duration_max}}
+              'duration': {'$gt': dur_min, '$lt': dur_max}}
 
     # ------------------------------------------------ slice ----- #
     if full_data:
@@ -119,7 +123,7 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
                    lon_min=float(-1), lon_max=float(361),
                    dur_min=int(2), dur_max=int(168)):
 
-    # --------------------------------------------- timeline ----- #
+    # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
         dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
     if request.args.get('dat_max'):
@@ -140,9 +144,9 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 
     # --------------------------------------------- duration ----- #
     if request.args.get('dur_min'):
-        dur_min = int(request.args.get('duration_min'))*7
+        dur_min = int(request.args.get('dur_min'))*7
     if request.args.get('dur_max'):
-        dur_max = int(request.args.get('duration_max'))*7
+        dur_max = int(request.args.get('dur_max'))*7
 
     # ----------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
