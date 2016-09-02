@@ -124,6 +124,7 @@ var rcsEddy = undefined;
 var rcsEddyClicked = function(eddyId) {
     return function() {
         myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
         rcsEddyUrl = rcsEddy + "/" + eddyId;
         rcsEddyLayer = L.geoJson.ajax(rcsEddyUrl, {
             style: myStyle,
@@ -139,6 +140,7 @@ sshEddyLayer.addTo(myMap);
 var sshEddy = undefined;
 var sshEddyClicked = function(eddyId) {
     return function() {
+        myMap.removeLayer(rcsEddyLayer);
         myMap.removeLayer(sshEddyLayer);
         sshEddyUrl = sshEddy + "/" + eddyId;
         sshEddyLayer = L.geoJson.ajax(sshEddyUrl, {
