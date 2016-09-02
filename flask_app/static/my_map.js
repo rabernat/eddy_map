@@ -1,13 +1,13 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– tile ––––– //
-var tileLayer_01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayer01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
-var tileLayer_02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayer02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.blue-marble-topo-bathy-jul-bw",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
-var tileLayer_03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.satellite",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 })
@@ -17,15 +17,15 @@ var tileLayer_03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}
 var myMap = L.map("mapid", {
     center: [0, 180],
     zoom: 1,
-    layers: tileLayer_01,
+    layers: tileLayer01,
     minZoom: 1,
     maxZoom: 10,
     maxBounds: [[-90, -180], [90, 540]]
 });
 var baseMaps = {
-    "Map 01": tileLayer_01,
-    "Map 02": tileLayer_02,
-    "Map 03": tileLayer_03,
+    "Map 01": tileLayer01,
+    "Map 02": tileLayer02,
+    "Map 03": tileLayer03,
 }
 L.control.layers(baseMaps).addTo(myMap);
 
@@ -41,7 +41,7 @@ var myStyle = {
     //"fillOpacity": 0.2,
     //"clickable": true
 };
-var myGeojsonMarkerOptions = {
+var myGeoJsonMarkerOptions = {
     radius: 4,
     stroke: false,
     //color: "#03f",
@@ -53,8 +53,11 @@ var myGeojsonMarkerOptions = {
     //clickable: true
 };
 
+
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– point ––––– //
-function myPointToLayer(feature, latlng) {
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– rcs –––– //
+function rcsPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
         case "start_center":
             var myClickable = true;
@@ -76,25 +79,24 @@ function myPointToLayer(feature, latlng) {
             var myClickable = false;
             var myFillColor = "#999999";
     }
-    var myCircleMarker = L.circleMarker(latlng, $.extend({}, myGeojsonMarkerOptions, {
+    var rcsCircleMarker = L.circleMarker(latlng, $.extend({}, myGeoJsonMarkerOptions, {
         fillColor: myFillColor,
         clickable: myClickable
     }));
     if (feature.properties.eddy_id) {
-        myCircleMarker = myCircleMarker.on("click", eddyClicked(feature.properties.eddy_id));
+        rcsCircleMarker = rcsCircleMarker.on("click", rcsEddyClicked(feature.properties.eddy_id));
     }
-    return myCircleMarker;
+    return rcsCircleMarker;
 }
 
-
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– polygon ––––– //
-function myPolygonToLayer(feature, latlng) {
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
+function sshPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
-        case "start_polygon":
-            var myClickable = false;
+        case "start_center":
+            var myClickable = true;
             var myFillColor = "#00ddcc";
             break;
-        case "end_polygon":
+        case "end_center":
             var myClickable = false;
             var myFillColor = "#dd0080";
             break;
@@ -102,33 +104,50 @@ function myPolygonToLayer(feature, latlng) {
             var myClickable = false;
             var myFillColor = "#999999";
     }
-    var myPolygon = L.polygon(latlng, $.extend({}, {myGeojsonMarkerOptions}, {
+    var sshCircleMarker = L.circleMarker(latlng, $.extend({}, myGeoJsonMarkerOptions, {
         fillColor: myFillColor,
         clickable: myClickable
     }));
     if (feature.properties.eddy_id) {
-        myPolygon = myPolygon.on("click", eddyClicked(feature.properties.eddy_id));
+        sshCircleMarker = sshCircleMarker.on("click", sshEddyClicked(feature.properties.eddy_id));
     }
-    return myPolygon;
+    return sshCircleMarker;
 }
 
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddy ––––– //
-var eddyLayer = L.geoJson.ajax();
-eddyLayer.addTo(myMap);
-var eddy = "/rcs_eddy";
-var eddyClicked = function(eddy_id) {
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– rcs –––– //
+var rcsEddyLayer = L.geoJson.ajax();
+rcsEddyLayer.addTo(myMap);
+var rcsEddy = undefined;
+var rcsEddyClicked = function(eddyId) {
     return function() {
-        myMap.removeLayer(eddyLayer);
-        eddyUrl = eddy + "/" + eddy_id;
-        eddyLayer = L.geoJson.ajax(eddyUrl, {
+        myMap.removeLayer(rcsEddyLayer);
+        rcsEddyUrl = rcsEddy + "/" + eddyId;
+        eddyLayer = L.geoJson.ajax(rcsEddyUrl, {
             style: myStyle,
-            pointToLayer: myPointToLayer,
+            pointToLayer: rcsPointToLayer,
         });
-        eddyLayer.addTo(myMap);
+        rcsEddyLayer.addTo(myMap);
     };
 };
 
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
+var sshEddyLayer = L.geoJson.ajax();
+sshEddyLayer.addTo(myMap);
+var sshEddy = undefined;
+var sshEddyClicked = function(eddyId) {
+    return function() {
+        myMap.removeLayer(sshEddyLayer);
+        sshEddyUrl = sshEddy + "/" + eddyId;
+        sshEddyLayer = L.geoJson.ajax(sshEddyUrl, {
+            style: myStyle,
+            pointToLayer: sshPointToLayer,
+        });
+        sshEddyLayer.addTo(myMap);
+    };
+};
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
 var info = L.control();
@@ -148,50 +167,50 @@ function eddyInfo(e) {
     info.update = function(props) {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var id_print = props.eddy_id;
+        var idPrint = props.eddy_id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
-        var start_day = props.eddy_start_date.substring(5, 7);
-        var start_month = props.eddy_start_date.substring(8, 11);
-        var start_year = props.eddy_start_date.substring(12, 16);
-        var start_date_print = start_month + " " + start_day + ", " + start_year;
-        var end_day = props.eddy_end_date.substring(5, 7);
-        var end_month = props.eddy_end_date.substring(8, 11);
-        var end_year = props.eddy_end_date.substring(12, 16);
-        var end_date_print = end_month + " " + end_day + ", " + end_year;
+        var startDay = props.eddy_start_date.substring(5, 7);
+        var startMonth = props.eddy_start_date.substring(8, 11);
+        var startYear = props.eddy_start_date.substring(12, 16);
+        var startDatePrint = startMonth + " " + startDay + ", " + startYear;
+        var endDay = props.eddy_end_date.substring(5, 7);
+        var endMonth = props.eddy_end_date.substring(8, 11);
+        var endYear = props.eddy_end_date.substring(12, 16);
+        var endDatePrint = endMonth + " " + endDay + ", " + endYear;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var duration_print = Math.round(props.eddy_duration/7);
+        var durationPrint = Math.round(props.eddy_duration/7);
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
-            var latitude_print = e.latlng.lat.toFixed(2) + " N";
+            var latitudePrint = e.latlng.lat.toFixed(2) + " N";
         } else if (e.latlng.lat < 0) {
-            var latitude_print = (- e.latlng.lat).toFixed(2) + " S";
+            var latitudePrint = (- e.latlng.lat).toFixed(2) + " S";
         } else {
-            var latitude_print = e.latlng.lat.toFixed(2);
+            var latitudePrint = e.latlng.lat.toFixed(2);
         }
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
         if (e.latlng.lng < 180) {
-            var longitude_print = e.latlng.lng.toFixed(2) + " E";
+            var longitudePrint = e.latlng.lng.toFixed(2) + " E";
         } else if (e.latlng.lng > 180) {
-            var longitude_print = (360 - e.latlng.lng).toFixed(2) + " W";
+            var longitudePrint = (360 - e.latlng.lng).toFixed(2) + " W";
         } else {
-            var longitude_print = e.latlng.lng.toFixed(2);
+            var longitudePrint = e.latlng.lng.toFixed(2);
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var mean_area_print = (props.eddy_mean_area/10**9).toFixed(2);
+        var meanAreaPrint = (props.eddy_mean_area/10**9).toFixed(2);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
-        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + id_print + "<br>"
-                            + "<b>Start Date</b>" + "<br>" + start_date_print + "<br>"
-                            + "<b>End Date</b>" + "<br>" + end_date_print + "<br>"
-                            + "<b>Duration</b>" + "<br>" + duration_print + " weeks" + "<br>"
-                            + "<b>Latitude</b>" + "<br>" + latitude_print + "<br>"
-                            + "<b>Longitude</b>" + "<br>" + longitude_print + "<br>"
-                            + "<b>Mean Area</b>" + "<br>" + mean_area_print + " km" + "<sup>2</sup>";
+        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idPrint + "<br>"
+                            + "<b>Start Date</b>" + "<br>" + startDatePrint + "<br>"
+                            + "<b>End Date</b>" + "<br>" + endDatePrint + "<br>"
+                            + "<b>Duration</b>" + "<br>" + durationPrint + " weeks" + "<br>"
+                            + "<b>Latitude</b>" + "<br>" + latitudePrint + "<br>"
+                            + "<b>Longitude</b>" + "<br>" + longitudePrint + "<br>"
+                            + "<b>Mean Area</b>" + "<br>" + meanAreaPrint + " km" + "<sup>2</sup>";
         }
     info.update(e.target.feature.properties);
 }
@@ -205,49 +224,77 @@ function myOnEachFeature(feature, layer) {
 }
 
 
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– geojson ––––– //
-var eddies = "/rcs_eddies";
-var jsonUrl = eddies;
-var geojsonLayer = new L.GeoJSON.AJAX(jsonUrl, {
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddies ––––– //
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– rcs –––– //
+var rcsEddies = undefined;
+var rcsJsonUrl = rcsEddies;
+var rcsGeoJsonLayer = new L.GeoJSON.AJAX(rcsJsonUrl, {
     style: myStyle,
-    pointToLayer: myPointToLayer,
+    pointToLayer: rcsPointToLayer,
     onEachFeature: myOnEachFeature
 });
-geojsonLayer.addTo(myMap);
+rcsGeoJsonLayer.addTo(myMap);
+
+// ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
+var sshEddies = undefined;
+var sshJsonUrl = sshEddies;
+var sshGeoJsonLayer = new L.GeoJSON.AJAX(sshJsonUrl, {
+    style: myStyle,
+    pointToLayer: sshPointToLayer,
+    onEachFeature: myOnEachFeature
+});
+sshGeoJsonLayer.addTo(myMap);
 
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– jquery ––––– //
 $(document).ready(function() {
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
-    var date_min = "1992-10-13";
-    var date_max = "2012-03-15";
-    var lat_min = -91;
-    var lat_max = 91;
-    var lon_min = -1;
-    var lon_max = 361;
-    var dur_min = 2;
-    var dur_max = 138;
+    var datMin = "1992-10-13";
+    var datMax = "2012-03-15";
+    var latMin = -91;
+    var latMax = 91;
+    var lonMin = -1;
+    var lonMax = 361;
+    var durMin = 2;
+    var durMax = 138;
 
-    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– switch ––––– //
-    $("input[name='collection']").on("switchChange.bootstrapSwitch", function(event, state) {
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
+    $("input[name='rcs']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
-            eddy = "/rcs_eddy";
-            eddies = "/rcs_eddies";
-        } else if (state === false) {
-            eddy = "/ssh_eddy";
-            eddies = "/ssh_eddies";
+            rcsEddy = "/rcs_eddy";
+            rcsEddies = "/rcs_eddies";
+        } else {
+            rcsEddy = "/rcs_eddy_remove";
+            rcsEddies = "/rcs_eddy_remove";
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies);
+        myMap.removeLayer(rcsEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies);
+    });
+    $("input[name='ssh']").on("switchChange.bootstrapSwitch", function(event, state) {
+        if (state === true) {
+            sshEddy = "/ssh_eddy";
+            sshEddies = "/ssh_eddies";
+        } else {
+            sshEddy = "/ssh_eddy_remove";
+            sshEddies = "/ssh_eddies_remove";
+        }
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
+        };
+        info.update();
+        myMap.removeLayer(sshEddyLayer);
+        sshGeoJsonLayer.refresh(sshEddies);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
     $("#dateSlider").on("valuesChanged", function(e, data) {
+        // format
         var format = function(number) {
             if (number < 10) {
                 return "0" + String(number);
@@ -255,73 +302,96 @@ $(document).ready(function() {
                 return String(number);
             }
         };
-        var date_min_slider = data.values.min;
-        var date_min_fix = date_min_slider;
-        date_min_fix.setDate(date_min_slider.getDate()-1);
-        var year_min = date_min_fix.getFullYear().toString();
-        var month_min = format(date_min_fix.getMonth()+1);
-        var day_min = format(date_min_fix.getDate());
-        date_min = year_min + "-" + month_min + "-" + day_min;
-        var date_max_slider = data.values.max;
-        var date_max_fix = date_max_slider;
-        date_max_fix.setDate(date_max_slider.getDate()+1);
-        var year_max = date_max_fix.getFullYear().toString();
-        var month_max = format(date_max_fix.getMonth()+1)
-        var day_max = format(date_max_fix.getDate());
-        date_max = year_max + "-" + month_max + "-" + day_max;
+        // min
+        var datMinSlider = data.values.min;
+        var datMinFix = dateMinSlider;
+        datMinFix.setDate(datMinSlider.getDate()-1);
+        var yearMin = datMinFix.getFullYear().toString();
+        var monthMin = format(datMinFix.getMonth()+1);
+        var dayMin = format(datMinFix.getDate());
+        datMin = yearMin + "-" + monthMin + "-" + dayMin;
+        // max
+        var dateMaxSlider = data.values.max;
+        var dateMaxFix = dateMaxSlider;
+        dateMaxFix.setDate(dateMaxSlider.getDate()+1);
+        var yearMax = date_max_fix.getFullYear().toString();
+        var monthMax = format(date_max_fix.getMonth()+1)
+        var dayMax = format(date_max_fix.getDate());
+        datMax = yearMax + "-" + monthMax + "-" + dayMax;
+        // refresh
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
-                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
     $("#slider_lat").on("valuesChanged", function(e, data) {
-        lat_min = (data.values.min-1).toString();
-        lat_max = (data.values.max+1).toString();
+        latMin = (data.values.min-1).toString();
+        latMax = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
-                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
     });
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
     $("#slider_lon").on("valuesChanged", function(e, data) {
-        lon_min = (data.values.min-1).toString();
-        lon_max = (data.values.max+1).toString();
+        lonMin = (data.values.min-1).toString();
+        lonMax = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
-                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
     $("#slider_dur").on("valuesChanged", function(e, data) {
-        dur_min = (data.values.min-1).toString();
-        dur_max = (data.values.max+1).toString();
+        durMin = (data.values.min-1).toString();
+        durMax = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
-        myMap.removeLayer(eddyLayer);
-        geojsonLayer.refresh(eddies + "?date_min=" + date_min + "&date_max=" + date_max
-                                    + "&lat_min=" + lat_min + "&lat_max=" + lat_max
-                                    + "&lon_min=" + lon_min + "&lon_max=" + lon_max
-                                    + "&duration_min=" + dur_min + "&duration_max=" + dur_max);
+        myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
     });
 });
