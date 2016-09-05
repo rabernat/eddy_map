@@ -94,11 +94,11 @@ function sshPointToLayer(feature, latlng) {
     switch (feature.properties.name) {
         case "start_center":
             var myClickable = true;
-            var myFillColor = "#fb9329";
+            var myFillColor = "#988fff";
             break;
         case "end_center":
             var myClickable = false;
-            var myFillColor = "#3300ff";
+            var myFillColor = "#fb9329";
             break;
         default:
             var myClickable = false;
@@ -316,9 +316,9 @@ $(document).ready(function() {
         var dateMaxSlider = data.values.max;
         var dateMaxFix = dateMaxSlider;
         dateMaxFix.setDate(dateMaxSlider.getDate()+1);
-        var yearMax = date_max_fix.getFullYear().toString();
-        var monthMax = format(date_max_fix.getMonth()+1)
-        var dayMax = format(date_max_fix.getDate());
+        var yearMax = dateMaxFix.getFullYear().toString();
+        var monthMax = format(dateMaxFix.getMonth()+1)
+        var dayMax = format(dateMaxFix.getDate());
         datMax = yearMax + "-" + monthMax + "-" + dayMax;
         // refresh
         info.update = function() {

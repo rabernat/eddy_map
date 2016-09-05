@@ -28,7 +28,7 @@ $("[name='ssh']").bootstrapSwitch({
     //indeterminate: false,
     //inverse: false,
     //radioAllOff: false,
-    //onColor: "primary",
+    onColor: "info",
     offColor: "default",
     onText: "ON",
     offText: "OFF",
