@@ -306,19 +306,19 @@ $(document).ready(function() {
         };
         // min
         var datMinSlider = data.values.min;
-        var datMinFix = dateMinSlider;
+        var datMinFix = datMinSlider;
         datMinFix.setDate(datMinSlider.getDate()-1);
         var yearMin = datMinFix.getFullYear().toString();
         var monthMin = format(datMinFix.getMonth()+1);
         var dayMin = format(datMinFix.getDate());
         datMin = yearMin + "-" + monthMin + "-" + dayMin;
         // max
-        var dateMaxSlider = data.values.max;
-        var dateMaxFix = dateMaxSlider;
-        dateMaxFix.setDate(dateMaxSlider.getDate()+1);
-        var yearMax = dateMaxFix.getFullYear().toString();
-        var monthMax = format(dateMaxFix.getMonth()+1)
-        var dayMax = format(dateMaxFix.getDate());
+        var datMaxSlider = data.values.max;
+        var datMaxFix = datMaxSlider;
+        datMaxFix.setDate(datMaxSlider.getDate()+1);
+        var yearMax = datMaxFix.getFullYear().toString();
+        var monthMax = format(datMaxFix.getMonth()+1)
+        var dayMax = format(datMaxFix.getDate());
         datMax = yearMax + "-" + monthMax + "-" + dayMax;
         // refresh
         info.update = function() {
