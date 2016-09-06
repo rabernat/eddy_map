@@ -2,15 +2,15 @@
 var tileLayer01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
-})
+});
 var tileLayer02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.blue-marble-topo-bathy-jul-bw",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
-})
+});
 var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.satellite",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
-})
+});
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
@@ -26,7 +26,7 @@ var baseMaps = {
     "Map 01": tileLayer01,
     "Map 02": tileLayer02,
     "Map 03": tileLayer03,
-}
+};
 L.control.layers(baseMaps).addTo(myMap);
 
 
