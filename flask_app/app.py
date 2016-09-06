@@ -179,7 +179,7 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
                     'coordinates': [start_pt, end_pt]
                     }
                 })
-                data.append(eddy)
+            data.append(eddy)
         except KeyError:
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
 
