@@ -186,7 +186,7 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
             except KeyError:
                 app.logger.warning('problem parsing eddy ' + eddy['_id'])
     else:
-        app.logger.warning('eddy number is ' + result_count ", beyond loading ability")
+        app.logger.warning('eddy number is ' + result_count + ', which is larger than the maximum loading number.')
 
     # ------------------------------------------------- wrap ----- #
     fc = {'type': 'FeatureCollection', 'features': data}
