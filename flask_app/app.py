@@ -161,27 +161,30 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 
     # ----------------------------------------------- inject ----- #
     data = []
-    for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
-        try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
-            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
-            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
-            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
-            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
-            if add_mean_trajectory:
-                start_pt = eddy['features'][0]['geometry']['coordinates']
-                end_pt = eddy['features'][1]['geometry']['coordinates']
-                eddy['features'].append({
-                    'type': 'Feature',
-                    'properties': {'name': 'trajectory'},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': [start_pt, end_pt]
-                    }
-                })
-            data.append(eddy)
-        except KeyError:
-            app.logger.warning('problem parsing eddy ' + eddy['_id'])
+    if mongo.db[COLLECTION_02].find(filter, projection).count() < 3000:
+        for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
+            try:
+                eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
+                eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
+                eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
+                eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
+                eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
+                if add_mean_trajectory:
+                    start_pt = eddy['features'][0]['geometry']['coordinates']
+                    end_pt = eddy['features'][1]['geometry']['coordinates']
+                    eddy['features'].append({
+                        'type': 'Feature',
+                        'properties': {'name': 'trajectory'},
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [start_pt, end_pt]
+                        }
+                    })
+                    data.append(eddy)
+                except KeyError:
+                    app.logger.warning('problem parsing eddy ' + eddy['_id'])
+    else:
+        app.logger.warning('eddy number is too large to load.')
 
     # ------------------------------------------------- wrap ----- #
     fc = {'type': 'FeatureCollection', 'features': data}
@@ -191,6 +194,7 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 # ----------------------------------------------------------------------------------------- test ----- #
 @app.route('/eddy_stream')
 def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
+
     """Query mongodb for all eddies in the database."""
 
     # maybe overwrite duration from query string
