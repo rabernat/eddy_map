@@ -181,8 +181,8 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
                         }
                     })
                     data.append(eddy)
-                except KeyError:
-                    app.logger.warning('problem parsing eddy ' + eddy['_id'])
+            except KeyError:
+                app.logger.warning('problem parsing eddy ' + eddy['_id'])
     else:
         app.logger.warning('eddy number is too large to load.')
 
