@@ -162,7 +162,8 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 
     # ----------------------------------------------- inject ----- #
     data = []
-    if mongo.db[COLLECTION_02].find(filter, projection).count() < 3000:
+    result_count = mongo.db[COLLECTION_02].find(filter, projection).count()
+    if result_count < 3000:
         for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
             try:
                 eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
@@ -185,7 +186,7 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
             except KeyError:
                 app.logger.warning('problem parsing eddy ' + eddy['_id'])
     else:
-        flash('eddy number is too large to load.')
+        app.logger.warning('eddy number is ' + result_count ", beyond loading ability")
 
     # ------------------------------------------------- wrap ----- #
     fc = {'type': 'FeatureCollection', 'features': data}
