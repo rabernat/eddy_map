@@ -2,7 +2,7 @@
 
 
 .leaflet-control-fullscreen a {
-    background: #ffffff url("images/fullscreen.png") no-repeat 0 0;
+    background: #ffffff url(images/fullscreen.png) no-repeat 0 0;
     background-size: 26px 52px;
 }
 
@@ -34,13 +34,13 @@
     height: 100% !important;
     top: 0 !important;
     left: 0 !important;
-    z-index:99999;
+    z-index: 99999;
   }
 
 @media
 (-webkit-min-device-pixel-ratio:2),
 (min-resolution:192dpi) {
     .leaflet-control-fullscreen a {
-        background-image: url("images/fullscreen-2x.png");
+        background-image: url(images/fullscreen-2x.png);
     }
 }

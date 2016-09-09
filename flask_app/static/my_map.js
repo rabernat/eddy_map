@@ -15,9 +15,7 @@ var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
 var myMap = L.map("mapid", {
-    fullscreenControl: {
-        pseudoFullscreen: false
-    },
+    fullscreenControl: true,
     center: [0, 180],
     zoom: 1,
     layers: tileLayer01,

@@ -26,7 +26,7 @@
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– js ––––– -->
     <script src="/static/leaflet.js"></script>
     <script src="/static/leaflet.ajax.js"></script>
-    <script src="/static/Leaflet.fullscreen.js"></script>
+    <script src="/static/leaflet.fullscreen.js"></script>
     <script src="/static/leaflet.spin.js"></script>
     <script src="/static/jquery.js"></script>
     <script src="/static/jquery.slidereveal.js"></script>
@@ -42,32 +42,11 @@
     <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– layout ––––– -->
     <div class="container">
         <div class="row" style="margin-top: 2%">
-            <div class="twelve columns">
+            <div class="ten columns">
                 <h1 class="header">
                     <a href="http://sverdrup.ldeo.columbia.edu:5000">Ocean Eddy Map</a>
                 </h1>
             </div>
-        </div>
-
-    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– collection ––––– -->
-        <div class="row" style="margin-top: 2%">
-            <div class="five columns">
-                <form>
-                    <input type="checkbox" name="rcs" unchecked>
-                    <input type="checkbox" name="ssh" unchecked>
-                    <script src="/static/bootstrap-switch.js"></script>
-                    <script src="/static/my_switch.js"></script>
-                </form>
-            </div>
-
-    <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– alert ––––– -->
-            <div class="five columns">
-                <div class="alert alert-success" role="alert">
-                    <strong>Success!</strong> Showing all 2990 results.
-                </div>
-            </div>
-
-    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
             <div class="two columns">
                 <div id="panelSlider">
                     <div id ="dateSlider"></div>
@@ -85,6 +64,38 @@
                 <script src="/static/my_slider.js"></script>
             </div>
         </div>
+
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– collection ––––– -->
+        <div class="row" style="margin-top: 2%">
+            <div class="two columns">
+                <form>
+                    <input type="checkbox" name="rcs" unchecked>
+                    <script src="/static/bootstrap-switch.js"></script>
+                    <script src="/static/my_switch.js"></script>
+                </form>
+            </div>
+            <div class="four columns">
+                <div class="alert alert-success" role="alert">
+                    <strong>Success!</strong> Showing all 2990 results.
+                </div>
+            </div>
+            <div class="two columns">
+                <form>
+                    <input type="checkbox" name="ssh" unchecked>
+                    <script src="/static/bootstrap-switch.js"></script>
+                    <script src="/static/my_switch.js"></script>
+                </form>
+            </div>
+            <div class="four columns">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Warning!</strong> Showing 3000/3010 results.
+                </div>
+            </div>
+        </div>
+
+    <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– alert ––––– -->
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
+
 
     <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
         <div class="row" style="margin-bottom: 2%">
