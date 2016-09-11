@@ -76,7 +76,10 @@
             </div>
             <div class="four columns">
                 <div class="alert alert-success" role="alert">
-                    <strong>Success!</strong> Showing all 2990 results.
+                <div id="rcs-alert"></div>
+                <script>
+                    document.getElementById("rcs-alert").innerHTML = "Showing " + "/rcs_alert" + " results."
+                </script>
                 </div>
             </div>
             <div class="two columns">
@@ -87,15 +90,14 @@
                 </form>
             </div>
             <div class="four columns">
-                <div class="alert alert-danger" role="alert">
-                    <strong>Warning!</strong> Showing 3000/3010 results.
+                <div class="alert alert-success" role="alert">
+                <div id="ssh-alert"></div>
+                <script>
+                    document.getElementById("ssh-alert").innerHTML = "Showing " + "/ssh_alert" + " results."
+                </script>
                 </div>
             </div>
         </div>
-
-    <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– alert ––––– -->
-    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– -->
-
 
     <!-- –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– -->
         <div class="row" style="margin-bottom: 2%">

@@ -26,6 +26,47 @@ def index():
 
 # ------------------------------------------------------------------------------------------ rcs ----- #
 
+# -------------------------------------------------------------------- alert ----- #
+@app.route('/rcs_alert')
+def get_rcs_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                  dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+                  lat_min=float(-91), lat_max=float(91),
+                  lon_min=float(-1), lon_max=float(361),
+                  dur_min=int(2), dur_max=int(168)):
+
+    # ------------------------------------------------- date ----- #
+    if request.args.get('dat_min'):
+        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
+    if request.args.get('dat_max'):
+        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- latitude ----- #
+    if request.args.get('lat_min'):
+        lat_min = float(request.args.get('lat_min'))
+    if request.args.get('lat_max'):
+        lat_max = float(request.args.get('lat_max'))
+
+    # -------------------------------------------- longitude ----- #
+    if request.args.get('lon_min'):
+        lon_min = float(request.args.get('lon_min'))
+    if request.args.get('lon_max'):
+        lon_max = float(request.args.get('lon_max'))
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
+
+    # ----------------------------------------------- filter ----- #
+    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
+              'duration': {'$gt': dur_min, '$lt': dur_max}}
+    projection = {'features': {'$slice': 1}}
+    rcs_count = str(mongo.db[COLLECTION_01].find(filter, projection).count())
+    return rcs_count
+
+
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/rcs_eddy/<string:eddy_id>')
 def get_rcs_eddy(eddy_id):
@@ -48,7 +89,6 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
         dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
 
     # --------------------------------------------- latitude ----- #
-
     if request.args.get('lat_min'):
         lat_min = float(request.args.get('lat_min'))
     if request.args.get('lat_max'):
@@ -107,6 +147,47 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
 
 
 # ------------------------------------------------------------------------------------------ ssh ----- #
+
+# -------------------------------------------------------------------- alert ----- #
+@app.route('/ssh_alert')
+def get_ssh_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                  dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+                  lat_min=float(-91), lat_max=float(91),
+                  lon_min=float(-1), lon_max=float(361),
+                  dur_min=int(2), dur_max=int(168)):
+
+    # ------------------------------------------------- date ----- #
+    if request.args.get('dat_min'):
+        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
+    if request.args.get('dat_max'):
+        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- latitude ----- #
+    if request.args.get('lat_min'):
+        lat_min = float(request.args.get('lat_min'))
+    if request.args.get('lat_max'):
+        lat_max = float(request.args.get('lat_max'))
+
+    # -------------------------------------------- longitude ----- #
+    if request.args.get('lon_min'):
+        lon_min = float(request.args.get('lon_min'))
+    if request.args.get('lon_max'):
+        lon_max = float(request.args.get('lon_max'))
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
+
+    # ----------------------------------------------- filter ----- #
+    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
+              'duration': {'$gt': dur_min, '$lt': dur_max}}
+    projection = {'features': {'$slice': 1}}
+    ssh_count = str(mongo.db[COLLECTION_02].find(filter, projection).count())
+    return ssh_count
+
 
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/ssh_eddy/<int:eddy_id>')
