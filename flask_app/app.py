@@ -183,7 +183,7 @@ def get_ssh_count(dat_min=datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
               'duration': {'$gt': dur_min, '$lt': dur_max}}
-    ssh_count = str(mongo.db[COLLECTION_02].find(filter).limit(1000).count())
+    ssh_count = str(mongo.db[COLLECTION_02].find(filter).count())
     return ssh_count
 
 
