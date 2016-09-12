@@ -28,8 +28,8 @@ def index():
 
 # -------------------------------------------------------------------- alert ----- #
 @app.route('/rcs_alert')
-def get_rcs_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                  dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+def get_rcs_count(dat_min=datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                  dat_max=datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
                   lat_min=float(-91), lat_max=float(91),
                   lon_min=float(-1), lon_max=float(361),
                   dur_min=int(2), dur_max=int(168)):
@@ -62,8 +62,7 @@ def get_rcs_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
               'duration': {'$gt': dur_min, '$lt': dur_max}}
-    projection = {'features': {'$slice': 1}}
-    rcs_count = str(mongo.db[COLLECTION_01].find(filter, projection).count())
+    rcs_count = str(mongo.db[COLLECTION_01].find(filter).count())
     return rcs_count
 
 
@@ -150,8 +149,8 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
 
 # -------------------------------------------------------------------- alert ----- #
 @app.route('/ssh_alert')
-def get_ssh_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                  dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
+def get_ssh_count(dat_min=datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
+                  dat_max=datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
                   lat_min=float(-91), lat_max=float(91),
                   lon_min=float(-1), lon_max=float(361),
                   dur_min=int(2), dur_max=int(168)):
@@ -184,8 +183,7 @@ def get_ssh_count(dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
               'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
               'duration': {'$gt': dur_min, '$lt': dur_max}}
-    projection = {'features': {'$slice': 1}}
-    ssh_count = str(mongo.db[COLLECTION_02].find(filter, projection).count())
+    ssh_count = str(mongo.db[COLLECTION_02].find(filter).limit(1000).count())
     return ssh_count
 
 
