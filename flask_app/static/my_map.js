@@ -175,17 +175,17 @@ function eddyInfo(e) {
         var idPrint = props.eddy_id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
-        var startDay = props.eddy_start_date.substring(5, 7);
-        var startMonth = props.eddy_start_date.substring(8, 11);
-        var startYear = props.eddy_start_date.substring(12, 16);
+        var startDay = props.start_date.substring(5, 7);
+        var startMonth = props.start_date.substring(8, 11);
+        var startYear = props.start_date.substring(12, 16);
         var startDatePrint = startMonth + " " + startDay + ", " + startYear;
-        var endDay = props.eddy_end_date.substring(5, 7);
-        var endMonth = props.eddy_end_date.substring(8, 11);
-        var endYear = props.eddy_end_date.substring(12, 16);
+        var endDay = props.end_date.substring(5, 7);
+        var endMonth = props.end_date.substring(8, 11);
+        var endYear = props.end_date.substring(12, 16);
         var endDatePrint = endMonth + " " + endDay + ", " + endYear;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var durationPrint = Math.round(props.eddy_duration/7);
+        var durationPrint = Math.round(props.duration/7);
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
@@ -206,7 +206,7 @@ function eddyInfo(e) {
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var meanAreaPrint = (props.eddy_mean_area/10**9).toFixed(2);
+        var meanAreaPrint = (props.mean_area/10**9).toFixed(2);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
         this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idPrint + "<br>"

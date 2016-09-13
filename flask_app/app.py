@@ -78,10 +78,10 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
     for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(3000):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
-            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start']
-            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end']
-            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration']
-            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area']
+            eddy['features'][0]['properties']['start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['duration'] = eddy['duration']
+            eddy['features'][0]['properties']['mean_area'] = eddy['area']
             if mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
@@ -156,10 +156,10 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
     for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
-            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start']
-            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end']
-            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration']
-            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area']
+            eddy['features'][0]['properties']['start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['duration'] = eddy['duration']
+            eddy['features'][0]['properties']['mean_area'] = eddy['area']
             if mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
