@@ -26,46 +26,6 @@ def index():
 
 # ------------------------------------------------------------------------------------------ rcs ----- #
 
-# -------------------------------------------------------------------- alert ----- #
-@app.route('/rcs_alert')
-def get_rcs_count(dat_min=datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                  dat_max=datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-                  lat_min=float(-91), lat_max=float(91),
-                  lon_min=float(-1), lon_max=float(361),
-                  dur_min=int(2), dur_max=int(168)):
-
-    # ------------------------------------------------- date ----- #
-    if request.args.get('dat_min'):
-        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
-    if request.args.get('dat_max'):
-        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
-
-    # --------------------------------------------- latitude ----- #
-    if request.args.get('lat_min'):
-        lat_min = float(request.args.get('lat_min'))
-    if request.args.get('lat_max'):
-        lat_max = float(request.args.get('lat_max'))
-
-    # -------------------------------------------- longitude ----- #
-    if request.args.get('lon_min'):
-        lon_min = float(request.args.get('lon_min'))
-    if request.args.get('lon_max'):
-        lon_max = float(request.args.get('lon_max'))
-
-    # --------------------------------------------- duration ----- #
-    if request.args.get('dur_min'):
-        dur_min = int(request.args.get('dur_min'))*7
-    if request.args.get('dur_max'):
-        dur_max = int(request.args.get('dur_max'))*7
-
-    # ----------------------------------------------- filter ----- #
-    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
-              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-              'duration': {'$gt': dur_min, '$lt': dur_max}}
-    rcs_count = str(mongo.db[COLLECTION_01].find(filter).count())
-    return rcs_count
-
-
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/rcs_eddy/<string:eddy_id>')
 def get_rcs_eddy(eddy_id):
@@ -74,18 +34,21 @@ def get_rcs_eddy(eddy_id):
 
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/rcs_eddies')
-def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
-                   dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                   dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-                   lat_min=float(-91), lat_max=float(91),
-                   lon_min=float(-1), lon_max=float(361),
-                   dur_min=int(2), dur_max=int(168)):
+def get_rcs_eddies(full_data=False, mean_trajectory=False,
+                   dat_min=None, dat_max=None, dur_min=None, dur_max=None,
+                   lat_min=None, lat_max=None, lon_min=None, lon_max=None):
 
     # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
         dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
     if request.args.get('dat_max'):
         dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
 
     # --------------------------------------------- latitude ----- #
     if request.args.get('lat_min'):
@@ -99,33 +62,27 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
     if request.args.get('lon_max'):
         lon_max = float(request.args.get('lon_max'))
 
-    # --------------------------------------------- duration ----- #
-    if request.args.get('dur_min'):
-        dur_min = int(request.args.get('dur_min'))*7
-    if request.args.get('dur_max'):
-        dur_max = int(request.args.get('dur_max'))*7
-
     # ----------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
-              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-              'duration': {'$gt': dur_min, '$lt': dur_max}}
+              'duration': {'$gt': dur_min, '$lt': dur_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}}}
 
     # ------------------------------------------------ slice ----- #
     if full_data:
-        projection = None # all
+        projection = None
     else:
-        projection = {'features': {'$slice': 1}} # start center
+        projection = {'features': {'$slice': 1}}
 
     # ----------------------------------------------- inject ----- #
     data = []
     for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(3000):
         try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
-            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
-            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
-            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
-            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
-            if add_mean_trajectory:
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration']
+            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area']
+            if mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
                 eddy['features'].append({
@@ -147,46 +104,6 @@ def get_rcs_eddies(full_data=False, add_mean_trajectory=False,
 
 # ------------------------------------------------------------------------------------------ ssh ----- #
 
-# -------------------------------------------------------------------- alert ----- #
-@app.route('/ssh_alert')
-def get_ssh_count(dat_min=datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                  dat_max=datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-                  lat_min=float(-91), lat_max=float(91),
-                  lon_min=float(-1), lon_max=float(361),
-                  dur_min=int(2), dur_max=int(168)):
-
-    # ------------------------------------------------- date ----- #
-    if request.args.get('dat_min'):
-        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
-    if request.args.get('dat_max'):
-        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
-
-    # --------------------------------------------- latitude ----- #
-    if request.args.get('lat_min'):
-        lat_min = float(request.args.get('lat_min'))
-    if request.args.get('lat_max'):
-        lat_max = float(request.args.get('lat_max'))
-
-    # -------------------------------------------- longitude ----- #
-    if request.args.get('lon_min'):
-        lon_min = float(request.args.get('lon_min'))
-    if request.args.get('lon_max'):
-        lon_max = float(request.args.get('lon_max'))
-
-    # --------------------------------------------- duration ----- #
-    if request.args.get('dur_min'):
-        dur_min = int(request.args.get('dur_min'))*7
-    if request.args.get('dur_max'):
-        dur_max = int(request.args.get('dur_max'))*7
-
-    # ----------------------------------------------- filter ----- #
-    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
-              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-              'duration': {'$gt': dur_min, '$lt': dur_max}}
-    ssh_count = str(mongo.db[COLLECTION_02].find(filter).count())
-    return ssh_count
-
-
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/ssh_eddy/<int:eddy_id>')
 def get_ssh_eddy(eddy_id):
@@ -195,12 +112,9 @@ def get_ssh_eddy(eddy_id):
 
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/ssh_eddies')
-def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
-                   dat_min = datetime.strptime('1992-10-13-12', '%Y-%m-%d-%H'),
-                   dat_max = datetime.strptime('2012-03-15-12', '%Y-%m-%d-%H'),
-                   lat_min=float(-91), lat_max=float(91),
-                   lon_min=float(-1), lon_max=float(361),
-                   dur_min=int(2), dur_max=int(168)):
+def get_ssh_eddies(full_data=False, mean_trajectory=False,
+                   dat_min=None, dat_max=None, dur_min=None, dur_max=None,
+                   lat_min=None, lat_max=None, lon_min=None, lon_max=None):
 
     # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
@@ -209,7 +123,6 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
         dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
 
     # --------------------------------------------- latitude ----- #
-
     if request.args.get('lat_min'):
         lat_min = float(request.args.get('lat_min'))
     if request.args.get('lat_max'):
@@ -229,25 +142,25 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 
     # ----------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
-              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}},
-              'duration': {'$gt': dur_min, '$lt': dur_max}}
+              'duration': {'$gt': dur_min, '$lt': dur_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}}}
 
     # ------------------------------------------------ slice ----- #
     if full_data:
-        projection = None # all
+        projection = None
     else:
-        projection = {'features': {'$slice': 1}} # start center
+        projection = {'features': {'$slice': 1}}
 
     # ----------------------------------------------- inject ----- #
     data = []
     for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
         try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id'] # id
-            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start'] # start date
-            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end'] # end date
-            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration'] # duration
-            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area'] # mean area
-            if add_mean_trajectory:
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['eddy_start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['eddy_end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['eddy_duration'] = eddy['duration']
+            eddy['features'][0]['properties']['eddy_mean_area'] = eddy['area']
+            if mean_trajectory:
                 start_pt = eddy['features'][0]['geometry']['coordinates']
                 end_pt = eddy['features'][1]['geometry']['coordinates']
                 eddy['features'].append({
@@ -270,16 +183,12 @@ def get_ssh_eddies(full_data=False, add_mean_trajectory=False,
 # ----------------------------------------------------------------------------------------- test ----- #
 @app.route('/eddy_stream')
 def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
-
     """Query mongodb for all eddies in the database."""
-
     # maybe overwrite duration from query string
     if request.args.get('duration'):
         duration = int(request.args.get('duration'))
-
     # get everything
     filter = {'duration': duration}
-
     if full_data:
         # get all fields, overloads the browser
         projection = None
@@ -287,9 +196,7 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
         # just get the first two features
         # (initial center, final center)
         projection = {'features': {'$slice': 1}}
-
     query = mongo.db[COLLECTION].find(filter, projection)
-
     # https://blog.al4.co.nz/2016/01/streaming-json-with-flask/
     def generate():
         """
@@ -298,7 +205,6 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
         thus we use a lagging generator, similar to http://stackoverflow.com/questions/1630320/
         """
         releases = query.__iter__()
-
         json_prefix = '{"type": "FeatureCollection", "features": ['
         json_suffix = ']}'
         try:
@@ -315,7 +221,6 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
             prev_release = release
         # Now yield the last iteration without comma but with the closing brackets
         yield json.dumps(prev_release, default=json_util.default) + json_suffix
-
     return Response(generate(), content_type='application/json')
 
 
