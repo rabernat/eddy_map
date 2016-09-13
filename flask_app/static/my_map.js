@@ -15,15 +15,13 @@ var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
 var myMap = L.map("mapid", {
-    fullscreenControl: {
-        pseudoFullscreen: false
-    },
+    fullscreenControl: {pseudoFullscreen: false},
     center: [0, 180],
     zoom: 1,
     layers: tileLayer01,
     minZoom: 1,
     maxZoom: 10,
-    maxBounds: [[-90, -180], [90, 540]]
+    maxBounds: [[-90, -180], [90, 540]],
 });
 var baseMaps = {
     "Map 01": tileLayer01,
@@ -154,6 +152,7 @@ var sshEddyClicked = function(eddyId) {
     };
 };
 
+
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
 var info = L.control();
 info.onAdd = function(myMap) {
@@ -256,14 +255,7 @@ sshGeoJsonLayer.addTo(myMap);
 $(document).ready(function() {
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
-    var datMin = "1992-10-13";
-    var datMax = "2012-03-15";
-    var latMin = -91;
-    var latMax = 91;
-    var lonMin = -1;
-    var lonMax = 361;
-    var durMin = 2;
-    var durMax = 138;
+    var datMin, datMax, durMin, durMax, latMin, latMax, lonMin, lonMax = undefined;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     $("input[name='rcs']").on("switchChange.bootstrapSwitch", function(event, state) {
@@ -279,7 +271,7 @@ $(document).ready(function() {
         };
         info.update();
         myMap.removeLayer(rcsEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies);
+        rcsGeoJsonLayer.refresh(rcsJsonUrl);
     });
     $("input[name='ssh']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
@@ -294,7 +286,7 @@ $(document).ready(function() {
         };
         info.update();
         myMap.removeLayer(sshEddyLayer);
-        sshGeoJsonLayer.refresh(sshEddies);
+        sshGeoJsonLayer.refresh(sshJsonUrl);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
@@ -340,6 +332,26 @@ $(document).ready(function() {
                                           + "&dur_min=" + durMin + "&dur_max=" + durMax);
     });
 
+    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
+    $("#slider_dur").on("valuesChanged", function(e, data) {
+        durMin = (data.values.min-1).toString();
+        durMax = (data.values.max+1).toString();
+        info.update = function() {
+            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
+        };
+        info.update();
+        myMap.removeLayer(rcsEddyLayer);
+        myMap.removeLayer(sshEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
+                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
+                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
+                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+    });
+
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
     $("#slider_lat").on("valuesChanged", function(e, data) {
         latMin = (data.values.min-1).toString();
@@ -364,26 +376,6 @@ $(document).ready(function() {
     $("#slider_lon").on("valuesChanged", function(e, data) {
         lonMin = (data.values.min-1).toString();
         lonMax = (data.values.max+1).toString();
-        info.update = function() {
-            this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
-        };
-        info.update();
-        myMap.removeLayer(rcsEddyLayer);
-        myMap.removeLayer(sshEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-    });
-
-    // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-    $("#slider_dur").on("valuesChanged", function(e, data) {
-        durMin = (data.values.min-1).toString();
-        durMax = (data.values.max+1).toString();
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
