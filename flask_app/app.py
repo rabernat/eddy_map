@@ -4,6 +4,7 @@ from bson import json_util
 from datetime import datetime
 from flask import Flask, jsonify, request, Response, send_file
 from flask.ext.pymongo import PyMongo
+import math
 import json
 
 
@@ -113,8 +114,8 @@ def get_ssh_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/ssh_eddies')
 def get_ssh_eddies(full_data=False, mean_trajectory=False,
-                   dat_min=None, dat_max=None, dur_min=None, dur_max=None,
-                   lat_min=None, lat_max=None, lon_min=None, lon_max=None):
+                   dat_min=-math.inf, dat_max=math.inf, dur_min=-math.inf, dur_max=math.inf,
+                   lat_min=-math.inf, lat_max=math.inf, lon_min=-math.inf, lon_max=math.inf):
 
     # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
