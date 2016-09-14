@@ -78,7 +78,10 @@
                 <div class="alert alert-success" role="alert">
                 <div id="rcs-alert"></div>
                 <script>
-                    document.getElementById("rcs-alert").innerHTML = "Success! Showing " + "/rcs_alert" + " results."
+                $.getJSON("/rcs_eddies", function(data) {
+                    rcsAlert = data.properties.alert;
+                    document.getElementById("rcs-alert").innerHTML = rcsAlert;
+                })
                 </script>
                 </div>
             </div>
@@ -93,7 +96,10 @@
                 <div class="alert alert-danger" role="alert">
                 <div id="ssh-alert"></div>
                 <script>
-                    document.getElementById("ssh-alert").innerHTML = "Warning! Showing " + "/ssh_alert" + " results."
+                    $.getJSON("/ssh_eddies", function(data) {
+                        sshAlert = data.properties.alert;
+                        document.getElementById("ssh-alert").innerHTML = sshAlert;
+                    })
                 </script>
                 </div>
             </div>
