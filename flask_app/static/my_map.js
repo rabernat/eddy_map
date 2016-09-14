@@ -268,6 +268,10 @@ $(document).ready(function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
+        $.getJSON(rcsJsonUrl, function(jsonUrl) {
+            rcsAlert = jsonUrl.properties.alert;
+            document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
         myMap.removeLayer(rcsEddyLayer);
         rcsGeoJsonLayer.refresh(rcsJsonUrl);
     });
@@ -283,6 +287,10 @@ $(document).ready(function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
+        $.getJSON(sshJsonUrl, function(jsonUrl) {
+            sshAlert = jsonUrl.properties.alert;
+            document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
         myMap.removeLayer(sshEddyLayer);
         sshGeoJsonLayer.refresh(sshJsonUrl);
     });

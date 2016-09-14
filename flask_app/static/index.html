@@ -78,10 +78,7 @@
                 <div class="alert alert-success" role="alert">
                 <div id="rcs-alert"></div>
                 <script>
-                $.getJSON("/rcs_eddies", function(data) {
-                    rcsAlert = data.properties.alert;
-                    document.getElementById("rcs-alert").innerHTML = rcsAlert;
-                })
+                    document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 results.";
                 </script>
                 </div>
             </div>
@@ -96,10 +93,7 @@
                 <div class="alert alert-danger" role="alert">
                 <div id="ssh-alert"></div>
                 <script>
-                    $.getJSON("/ssh_eddies", function(data) {
-                        sshAlert = data.properties.alert;
-                        document.getElementById("ssh-alert").innerHTML = sshAlert;
-                    })
+                    document.getElementById("ssh-alert").innerHTML = "Success! Showing all 0 results.";
                 </script>
                 </div>
             </div>
