@@ -78,9 +78,9 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
     loading_max = 3000;
     result_count = mongo.db[COLLECTION_01].find(filter, projection).count()
     if result_count > loading_max:
-        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " results."
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
     else:
-        alert = "Success! Showing all " + str(result_count) + " results."
+        alert = "Success! Showing all " + str(result_count) + " result(s)."
 
     # ----------------------------------------------- inject ----- #
     data = []
@@ -165,9 +165,9 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
     loading_max = 3000;
     result_count = mongo.db[COLLECTION_02].find(filter, projection).count()
     if result_count > loading_max:
-        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " results."
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
     else:
-        alert = "Success! Showing all " + str(result_count) + " results."
+        alert = "Success! Showing all " + str(result_count) + " result(s)."
 
     # ----------------------------------------------- inject ----- #
     data = []

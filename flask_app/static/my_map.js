@@ -252,8 +252,18 @@ sshGeoJsonLayer.addTo(myMap);
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– jquery ––––– //
 $(document).ready(function() {
 
+    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– url ––––– //
+    var sliderUrl = undefined;
+
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
-    var datMin, datMax, durMin, durMax, latMin, latMax, lonMin, lonMax = undefined;
+    var datMin = "0001-01-01";
+    var datMax = "9999-12-31";
+    var durMin = 0;
+    var durMax = 10**10;
+    var latMin = -90;
+    var latMax = 90;
+    var lonMin = 0;
+    var lonMax = 360;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     $("input[name='rcs']").on("switchChange.bootstrapSwitch", function(event, state) {
@@ -263,17 +273,18 @@ $(document).ready(function() {
         } else {
             rcsEddy = "/rcs_eddy_remove";
             rcsJsonUrl = "/rcs_eddy_remove";
+            document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 result(s)."
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
+        myMap.removeLayer(rcsEddyLayer);
+        rcsGeoJsonLayer.refresh(rcsJsonUrl);
         $.getJSON(rcsJsonUrl, function(jsonUrl) {
             rcsAlert = jsonUrl.properties.alert;
             document.getElementById("rcs-alert").innerHTML = rcsAlert;
         });
-        myMap.removeLayer(rcsEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsJsonUrl);
     });
     $("input[name='ssh']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
@@ -282,17 +293,18 @@ $(document).ready(function() {
         } else {
             sshEddy = "/ssh_eddy_remove";
             sshJsonUrl = "/ssh_eddies_remove";
+            document.getElementById("ssh-alert").innerHTML = "Success! Showing all 0 result(s)."
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
         info.update();
+        myMap.removeLayer(sshEddyLayer);
+        sshGeoJsonLayer.refresh(sshJsonUrl);
         $.getJSON(sshJsonUrl, function(jsonUrl) {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        myMap.removeLayer(sshEddyLayer);
-        sshGeoJsonLayer.refresh(sshJsonUrl);
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
@@ -328,14 +340,20 @@ $(document).ready(function() {
         info.update();
         myMap.removeLayer(rcsEddyLayer);
         myMap.removeLayer(sshEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sliderUrl = "?dat_min=" + datMin + "&dat_max=" + datMax + "&dur_min=" + durMin + "&dur_max=" + durMax
+                  + "&lat_min=" + latMin + "&lat_max=" + latMax + "&lon_min=" + lonMin + "&lon_max=" + lonMax;
+        rcsSliderUrl = rcsJsonUrl + sliderUrl;
+        sshSliderUrl = sshJsonUrl + sliderUrl;
+        rcsGeoJsonLayer.refresh(rcsSliderUrl);
+        sshGeoJsonLayer.refresh(sshSliderUrl);
+        $.getJSON(rcsSliderUrl, function(jsonUrl) {
+            rcsAlert = jsonUrl.properties.alert;
+            document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
+        $.getJSON(sshSliderUrl, function(jsonUrl) {
+            sshAlert = jsonUrl.properties.alert;
+            document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
@@ -348,14 +366,20 @@ $(document).ready(function() {
         info.update();
         myMap.removeLayer(rcsEddyLayer);
         myMap.removeLayer(sshEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sliderUrl = "?dat_min=" + datMin + "&dat_max=" + datMax + "&dur_min=" + durMin + "&dur_max=" + durMax
+                  + "&lat_min=" + latMin + "&lat_max=" + latMax + "&lon_min=" + lonMin + "&lon_max=" + lonMax;
+        rcsSliderUrl = rcsJsonUrl + sliderUrl;
+        sshSliderUrl = sshJsonUrl + sliderUrl;
+        rcsGeoJsonLayer.refresh(rcsSliderUrl);
+        sshGeoJsonLayer.refresh(sshSliderUrl);
+        $.getJSON(rcsSliderUrl, function(jsonUrl) {
+            rcsAlert = jsonUrl.properties.alert;
+            document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
+        $.getJSON(sshSliderUrl, function(jsonUrl) {
+            sshAlert = jsonUrl.properties.alert;
+            document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
@@ -368,14 +392,20 @@ $(document).ready(function() {
         info.update();
         myMap.removeLayer(rcsEddyLayer);
         myMap.removeLayer(sshEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sliderUrl = "?dat_min=" + datMin + "&dat_max=" + datMax + "&dur_min=" + durMin + "&dur_max=" + durMax
+                  + "&lat_min=" + latMin + "&lat_max=" + latMax + "&lon_min=" + lonMin + "&lon_max=" + lonMax;
+        rcsSliderUrl = rcsJsonUrl + sliderUrl;
+        sshSliderUrl = sshJsonUrl + sliderUrl;
+        rcsGeoJsonLayer.refresh(rcsSliderUrl);
+        sshGeoJsonLayer.refresh(sshSliderUrl);
+        $.getJSON(rcsSliderUrl, function(jsonUrl) {
+            rcsAlert = jsonUrl.properties.alert;
+            document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
+        $.getJSON(sshSliderUrl, function(jsonUrl) {
+            sshAlert = jsonUrl.properties.alert;
+            document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
     });
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
@@ -388,13 +418,19 @@ $(document).ready(function() {
         info.update();
         myMap.removeLayer(rcsEddyLayer);
         myMap.removeLayer(sshEddyLayer);
-        rcsGeoJsonLayer.refresh(rcsEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
-        sshGeoJsonLayer.refresh(sshEddies + "?dat_min=" + datMin + "&dat_max=" + datMax
-                                          + "&lat_min=" + latMin + "&lat_max=" + latMax
-                                          + "&lon_min=" + lonMin + "&lon_max=" + lonMax
-                                          + "&dur_min=" + durMin + "&dur_max=" + durMax);
+        sliderUrl = "?dat_min=" + datMin + "&dat_max=" + datMax + "&dur_min=" + durMin + "&dur_max=" + durMax
+                  + "&lat_min=" + latMin + "&lat_max=" + latMax + "&lon_min=" + lonMin + "&lon_max=" + lonMax;
+        rcsSliderUrl = rcsJsonUrl + sliderUrl;
+        sshSliderUrl = sshJsonUrl + sliderUrl;
+        rcsGeoJsonLayer.refresh(rcsSliderUrl);
+        sshGeoJsonLayer.refresh(sshSliderUrl);
+        $.getJSON(rcsSliderUrl, function(jsonUrl) {
+            rcsAlert = jsonUrl.properties.alert;
+            document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
+        $.getJSON(sshSliderUrl, function(jsonUrl) {
+            sshAlert = jsonUrl.properties.alert;
+            document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
     });
 });
