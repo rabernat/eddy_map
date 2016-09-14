@@ -4,7 +4,6 @@ from bson import json_util
 from datetime import datetime
 from flask import Flask, jsonify, request, Response, send_file
 from flask.ext.pymongo import PyMongo
-import math
 import json
 
 
@@ -36,8 +35,9 @@ def get_rcs_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/rcs_eddies')
 def get_rcs_eddies(full_data=False, mean_trajectory=False,
-                   dat_min=None, dat_max=None, dur_min=None, dur_max=None,
-                   lat_min=None, lat_max=None, lon_min=None, lon_max=None):
+                   dat_min=datetime.strptime('0001-01-01-12', '%Y-%m-%d-%H'),
+                   dat_max=datetime.strptime('9999-12-31-12', '%Y-%m-%d-%H'),
+                   dur_min=0, dur_max=10**10, lat_min=-90, lat_max=90, lon_min=0, lon_max=360):
 
     # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
@@ -74,9 +74,17 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
     else:
         projection = {'features': {'$slice': 1}}
 
+    # ------------------------------------------------ alert ----- #
+    loading_max = 3000;
+    result_count = mongo.db[COLLECTION_01].find(filter, projection).count()
+    if result_count > loading_max:
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " results."
+    else:
+        alert = "Success! Showing all " + str(result_count) + " results."
+
     # ----------------------------------------------- inject ----- #
     data = []
-    for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(3000):
+    for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(loading_max):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
             eddy['features'][0]['properties']['start_date'] = eddy['date_start']
@@ -99,7 +107,7 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
 
     # ------------------------------------------------- wrap ----- #
-    fc = {'type': 'FeatureCollection', 'features': data}
+    fc = {'type': 'FeatureCollection', 'features': data, 'properties': {'alert': alert}}
     return jsonify(fc)
 
 
@@ -114,14 +122,21 @@ def get_ssh_eddy(eddy_id):
 # ------------------------------------------------------------------- eddies ----- #
 @app.route('/ssh_eddies')
 def get_ssh_eddies(full_data=False, mean_trajectory=False,
-                   dat_min=-math.inf, dat_max=math.inf, dur_min=-math.inf, dur_max=math.inf,
-                   lat_min=-math.inf, lat_max=math.inf, lon_min=-math.inf, lon_max=math.inf):
+                   dat_min=datetime.strptime('0001-01-01-12', '%Y-%m-%d-%H'),
+                   dat_max=datetime.strptime('9999-12-31-12', '%Y-%m-%d-%H'),
+                   dur_min=0, dur_max=10**10, lat_min=-90, lat_max=90, lon_min=0, lon_max=360):
 
     # ------------------------------------------------- date ----- #
     if request.args.get('dat_min'):
         dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
     if request.args.get('dat_max'):
         dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
 
     # --------------------------------------------- latitude ----- #
     if request.args.get('lat_min'):
@@ -135,12 +150,6 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
     if request.args.get('lon_max'):
         lon_max = float(request.args.get('lon_max'))
 
-    # --------------------------------------------- duration ----- #
-    if request.args.get('dur_min'):
-        dur_min = int(request.args.get('dur_min'))*7
-    if request.args.get('dur_max'):
-        dur_max = int(request.args.get('dur_max'))*7
-
     # ----------------------------------------------- filter ----- #
     filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
               'duration': {'$gt': dur_min, '$lt': dur_max},
@@ -152,9 +161,17 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
     else:
         projection = {'features': {'$slice': 1}}
 
+    # ------------------------------------------------ alert ----- #
+    loading_max = 3000;
+    result_count = mongo.db[COLLECTION_02].find(filter, projection).count()
+    if result_count > loading_max:
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " results."
+    else:
+        alert = "Success! Showing all " + str(result_count) + " results."
+
     # ----------------------------------------------- inject ----- #
     data = []
-    for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(3000):
+    for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(loading_max):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
             eddy['features'][0]['properties']['start_date'] = eddy['date_start']
@@ -177,7 +194,7 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
             app.logger.warning('problem parsing eddy ' + eddy['_id'])
 
     # ------------------------------------------------- wrap ----- #
-    fc = {'type': 'FeatureCollection', 'features': data}
+    fc = {'type': 'FeatureCollection', 'features': data, 'properties': {'alert': alert}}
     return jsonify(fc)
 
 

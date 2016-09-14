@@ -231,8 +231,7 @@ function myOnEachFeature(feature, layer) {
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– eddies ––––– //
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– rcs –––– //
-var rcsEddies = undefined;
-var rcsJsonUrl = rcsEddies;
+var rcsJsonUrl = undefined;
 var rcsGeoJsonLayer = new L.GeoJSON.AJAX(rcsJsonUrl, {
     style: myStyle,
     pointToLayer: rcsPointToLayer,
@@ -241,8 +240,7 @@ var rcsGeoJsonLayer = new L.GeoJSON.AJAX(rcsJsonUrl, {
 rcsGeoJsonLayer.addTo(myMap);
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
-var sshEddies = undefined;
-var sshJsonUrl = sshEddies;
+var sshJsonUrl = undefined;
 var sshGeoJsonLayer = new L.GeoJSON.AJAX(sshJsonUrl, {
     style: myStyle,
     pointToLayer: sshPointToLayer,
@@ -261,10 +259,10 @@ $(document).ready(function() {
     $("input[name='rcs']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
             rcsEddy = "/rcs_eddy";
-            rcsEddies = "/rcs_eddies";
+            rcsJsonUrl = "/rcs_eddies";
         } else {
             rcsEddy = "/rcs_eddy_remove";
-            rcsEddies = "/rcs_eddy_remove";
+            rcsJsonUrl = "/rcs_eddy_remove";
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
@@ -276,10 +274,10 @@ $(document).ready(function() {
     $("input[name='ssh']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
             sshEddy = "/ssh_eddy";
-            sshEddies = "/ssh_eddies";
+            sshJsonUrl = "/ssh_eddies";
         } else {
             sshEddy = "/ssh_eddy_remove";
-            sshEddies = "/ssh_eddies_remove";
+            sshJsonUrl = "/ssh_eddies_remove";
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
