@@ -205,7 +205,7 @@ function eddyInfo(e) {
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var meanAreaPrint = (props.mean_area/10**9).toFixed(2);
+        var meanAreaPrint = (props.mean_area/Math.pow(10, 9)).toFixed(2);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
         this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idPrint + "<br>"
@@ -261,7 +261,7 @@ $(document).ready(function() {
     var datMin = "0001-01-01";
     var datMax = "9999-12-31";
     var durMin = 0;
-    var durMax = 10**10;
+    var durMax = Math.pow(10, 10);
     var latMin = -90;
     var latMax = 90;
     var lonMin = 0;
