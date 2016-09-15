@@ -134,6 +134,7 @@ var rcsEddyClicked = function(eddyId) {
         rcsEddyLayer.addTo(myMap);
     };
 };
+rcsEddyLayer.bringToFront();
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
 var sshEddyLayer = L.geoJson.ajax();
@@ -151,7 +152,7 @@ var sshEddyClicked = function(eddyId) {
         sshEddyLayer.addTo(myMap);
     };
 };
-
+sshEddyLayer.bringToFront();
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
 var info = L.control();
