@@ -84,7 +84,7 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
 
     # ----------------------------------------------- inject ----- #
     data = []
-    for eddy in mongo.db[COLLECTION_01].find(filter, projection).limit(loading_max):
+    for eddy in mongo.db[COLLECTION_RCS].find(filter, projection).limit(loading_max):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
             eddy['features'][0]['properties']['start_date'] = eddy['date_start']
