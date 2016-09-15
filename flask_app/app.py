@@ -14,8 +14,8 @@ mongo = PyMongo(app)
 
 
 # ----------------------------------------------------------------------------------------- data ----- #
-COLLECTION_01 = 'rcs_eddies'
-COLLECTION_02 = 'ssh_eddies'
+COLLECTION_RCS = 'rcs_eddies'
+COLLECTION_SSH = 'ssh_eddies'
 
 
 # ----------------------------------------------------------------------------------------- home ----- #
@@ -29,7 +29,7 @@ def index():
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/rcs_eddy/<string:eddy_id>')
 def get_rcs_eddy(eddy_id):
-    eddy = mongo.db[COLLECTION_01].find_one({'_id': eddy_id})
+    eddy = mongo.db[COLLECTION_RCS].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
 # ------------------------------------------------------------------- eddies ----- #
@@ -76,7 +76,7 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
 
     # ------------------------------------------------ alert ----- #
     loading_max = 3000;
-    result_count = mongo.db[COLLECTION_01].find(filter, projection).count()
+    result_count = mongo.db[COLLECTION_RCS].find(filter, projection).count()
     if result_count > loading_max:
         alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
     else:
@@ -116,7 +116,7 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
 # --------------------------------------------------------------------- eddy ----- #
 @app.route('/ssh_eddy/<int:eddy_id>')
 def get_ssh_eddy(eddy_id):
-    eddy = mongo.db[COLLECTION_02].find_one({'_id': eddy_id})
+    eddy = mongo.db[COLLECTION_SSH].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
 # ------------------------------------------------------------------- eddies ----- #
@@ -163,7 +163,7 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
 
     # ------------------------------------------------ alert ----- #
     loading_max = 3000;
-    result_count = mongo.db[COLLECTION_02].find(filter, projection).count()
+    result_count = mongo.db[COLLECTION_SSH].find(filter, projection).count()
     if result_count > loading_max:
         alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
     else:
@@ -171,7 +171,7 @@ def get_ssh_eddies(full_data=False, mean_trajectory=False,
 
     # ----------------------------------------------- inject ----- #
     data = []
-    for eddy in mongo.db[COLLECTION_02].find(filter, projection).limit(loading_max):
+    for eddy in mongo.db[COLLECTION_SSH].find(filter, projection).limit(loading_max):
         try:
             eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
             eddy['features'][0]['properties']['start_date'] = eddy['date_start']

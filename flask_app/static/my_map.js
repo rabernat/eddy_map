@@ -1,13 +1,13 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– tile ––––– //
-var tileLayer01 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayerA = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.oceans-white",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 });
-var tileLayer02 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayerB = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.blue-marble-topo-bathy-jul-bw",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 });
-var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var tileLayerC = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     id: "mapbox.satellite",
     accessToken: "pk.eyJ1IjoicmFiZXJuYXQiLCJhIjoiY2luajV5eW51MHhneXVhbTNhdWEzbmRkaSJ9.EzUhO4SMompzRVWAYZcoFw"
 });
@@ -24,9 +24,9 @@ var myMap = L.map("mapid", {
     fullscreenControl: true
 });
 var baseMaps = {
-    "Map 01": tileLayer01,
-    "Map 02": tileLayer02,
-    "Map 03": tileLayer03,
+    "Map A": tileLayerA,
+    "Map B": tileLayerB,
+    "Map C": tileLayerC,
 };
 L.control.layers(baseMaps).addTo(myMap);
 
@@ -134,7 +134,6 @@ var rcsEddyClicked = function(eddyId) {
         rcsEddyLayer.addTo(myMap);
     };
 };
-rcsEddyLayer.bringToFront();
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– ssh –––– //
 var sshEddyLayer = L.geoJson.ajax();
@@ -152,7 +151,7 @@ var sshEddyClicked = function(eddyId) {
         sshEddyLayer.addTo(myMap);
     };
 };
-sshEddyLayer.bringToFront();
+
 
 // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– //
 var info = L.control();
@@ -255,6 +254,8 @@ $(document).ready(function() {
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– url ––––– //
     var sliderUrl = undefined;
+    var rcsSliderUrl = undefined;
+    var sshSliderUrl = undefined;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
     var datMin = "0001-01-01";
