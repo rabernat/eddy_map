@@ -17,7 +17,7 @@ var tileLayerC = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.p
 var myMap = L.map("mapid", {
     center: [0, 180],
     zoom: 1,
-    layers: tileLayer01,
+    layers: tileLayerA,
     minZoom: 1,
     maxZoom: 12,
     maxBounds: [[-90, -180], [90, 540]],
