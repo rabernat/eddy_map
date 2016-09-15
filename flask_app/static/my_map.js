@@ -15,13 +15,13 @@ var tileLayer03 = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– //
 var myMap = L.map("mapid", {
-    fullscreenControl: {pseudoFullscreen: false},
     center: [0, 180],
     zoom: 1,
     layers: tileLayer01,
     minZoom: 1,
-    maxZoom: 10,
+    maxZoom: 12,
     maxBounds: [[-90, -180], [90, 540]],
+    fullscreenControl: true
 });
 var baseMaps = {
     "Map 01": tileLayer01,
