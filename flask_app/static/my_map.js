@@ -26,32 +26,22 @@ var myMap = L.map("mapid", {
 var baseMaps = {
     "Map A": tileLayerA,
     "Map B": tileLayerB,
-    "Map C": tileLayerC,
+    "Map C": tileLayerC
 };
 L.control.layers(baseMaps).addTo(myMap);
 
 
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– style ––––– //
 var myStyle = {
-    //"stroke": true,
     "color": "#999999",
-    "weight": 2,
     "opacity": 1,
-    //"fill": depends,
-    //"fillColor": "#03f",
-    //"fillOpacity": 0.2,
-    //"clickable": true
+    "weight": 2
 };
 var myGeoJsonMarkerOptions = {
-    radius: 4,
-    stroke: false,
-    //color: "#03f",
-    //weight: 5,
-    //opacity: 0.5,
     fill: true,
-    //fillColor: "03f",
     fillOpacity: 0.5,
-    //clickable: true
+    radius: 4,
+    stroke: false
 };
 
 
@@ -171,51 +161,51 @@ function eddyInfo(e) {
     info.update = function(props) {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var idPrint = props.eddy_id;
+        var idInfo = props.eddy_id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
         var startDay = props.start_date.substring(5, 7);
         var startMonth = props.start_date.substring(8, 11);
         var startYear = props.start_date.substring(12, 16);
-        var startDatePrint = startMonth + " " + startDay + ", " + startYear;
+        var startDateInfo = startMonth + " " + startDay + ", " + startYear;
         var endDay = props.end_date.substring(5, 7);
         var endMonth = props.end_date.substring(8, 11);
         var endYear = props.end_date.substring(12, 16);
-        var endDatePrint = endMonth + " " + endDay + ", " + endYear;
+        var endDateInfo = endMonth + " " + endDay + ", " + endYear;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var durationPrint = Math.round(props.duration/7);
+        var durationInfo = Math.round(props.duration/7);
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
-            var latitudePrint = e.latlng.lat.toFixed(2) + " N";
+            var latitudeInfo = e.latlng.lat.toFixed(2) + " N";
         } else if (e.latlng.lat < 0) {
-            var latitudePrint = (- e.latlng.lat).toFixed(2) + " S";
+            var latitudeInfo = (- e.latlng.lat).toFixed(2) + " S";
         } else {
-            var latitudePrint = e.latlng.lat.toFixed(2);
+            var latitudeInfo = e.latlng.lat.toFixed(2);
         }
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
         if (e.latlng.lng < 180) {
-            var longitudePrint = e.latlng.lng.toFixed(2) + " E";
+            var longitudeInfo = e.latlng.lng.toFixed(2) + " E";
         } else if (e.latlng.lng > 180) {
-            var longitudePrint = (360 - e.latlng.lng).toFixed(2) + " W";
+            var longitudeInfo = (360 - e.latlng.lng).toFixed(2) + " W";
         } else {
-            var longitudePrint = e.latlng.lng.toFixed(2);
+            var longitudeInfo = e.latlng.lng.toFixed(2);
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var meanAreaPrint = (props.mean_area/Math.pow(10, 9)).toFixed(2);
+        var meanAreaInfo = (props.mean_area/Math.pow(10, 9)).toFixed(2);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
-        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idPrint + "<br>"
-                            + "<b>Start Date</b>" + "<br>" + startDatePrint + "<br>"
-                            + "<b>End Date</b>" + "<br>" + endDatePrint + "<br>"
-                            + "<b>Duration</b>" + "<br>" + durationPrint + " weeks" + "<br>"
-                            + "<b>Latitude</b>" + "<br>" + latitudePrint + "<br>"
-                            + "<b>Longitude</b>" + "<br>" + longitudePrint + "<br>"
-                            + "<b>Mean Area</b>" + "<br>" + meanAreaPrint + " km" + "<sup>2</sup>";
-        }
+        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idInfo + "<br>"
+                            + "<b>Start Date</b>" + "<br>" + startDateInfo + "<br>"
+                            + "<b>End Date</b>" + "<br>" + endDateInfo + "<br>"
+                            + "<b>Duration</b>" + "<br>" + durationInfo + " weeks" + "<br>"
+                            + "<b>Latitude</b>" + "<br>" + latitudeInfo + "<br>"
+                            + "<b>Longitude</b>" + "<br>" + longitudeInfo + "<br>"
+                            + "<b>Mean Area</b>" + "<br>" + meanAreaInfo + " km" + "<sup>2</sup>";
+        };
     info.update(e.target.feature.properties);
 }
 
@@ -275,7 +265,7 @@ $(document).ready(function() {
         } else {
             rcsEddy = "/rcs_eddy_remove";
             rcsJsonUrl = "/rcs_eddy_remove";
-            document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 result(s)."
+            document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 result(s).";
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
@@ -295,7 +285,7 @@ $(document).ready(function() {
         } else {
             sshEddy = "/ssh_eddy_remove";
             sshJsonUrl = "/ssh_eddies_remove";
-            document.getElementById("ssh-alert").innerHTML = "Success! Showing all 0 result(s)."
+            document.getElementById("ssh-alert").innerHTML = "Success! Showing all 0 result(s).";
         }
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
