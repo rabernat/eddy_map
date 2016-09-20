@@ -258,6 +258,7 @@ $(document).ready(function() {
     var lonMax = 360;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
+    // rcs
     $("input[name='rcs']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
             rcsEddy = "/rcs_eddy";
@@ -278,6 +279,7 @@ $(document).ready(function() {
             document.getElementById("rcs-alert").innerHTML = rcsAlert;
         });
     });
+    // ssh
     $("input[name='ssh']").on("switchChange.bootstrapSwitch", function(event, state) {
         if (state === true) {
             sshEddy = "/ssh_eddy";
