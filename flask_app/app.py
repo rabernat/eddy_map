@@ -75,7 +75,7 @@ def get_rcs_eddies(full_data=False, mean_trajectory=False,
         projection = {'features': {'$slice': 1}}
 
     # ------------------------------------------------ alert ----- #
-    loading_max = 3000;
+    loading_max = 5000;
     result_count = mongo.db[COLLECTION_RCS].find(filter, projection).count()
     if result_count > loading_max:
         alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
