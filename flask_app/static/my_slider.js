@@ -1,7 +1,7 @@
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– panel ––––– //
 $("#panelSlider").slideReveal({
     trigger: $("#button"),
-    width: 800,
+    width: 1200,
     push: false,
     overlay: true,
     overlayColor: "rgba(0,0,0,0.8)",

@@ -161,50 +161,50 @@ function eddyInfo(e) {
     info.update = function(props) {
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– id ––––– //
-        var idInfo = props.eddy_id;
+        var id = props.eddy_id;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– date ––––– //
-        var startDay = props.start_date.substring(5, 7);
-        var startMonth = props.start_date.substring(8, 11);
-        var startYear = props.start_date.substring(12, 16);
-        var startDateInfo = startMonth + " " + startDay + ", " + startYear;
-        var endDay = props.end_date.substring(5, 7);
-        var endMonth = props.end_date.substring(8, 11);
-        var endYear = props.end_date.substring(12, 16);
-        var endDateInfo = endMonth + " " + endDay + ", " + endYear;
+        var dayS = props.start_date.substring(5, 7);
+        var monthS = props.start_date.substring(8, 11);
+        var yearS = props.start_date.substring(12, 16);
+        var dateS = monthS + " " + dayS + ", " + yearS;
+        var dayE = props.end_date.substring(5, 7);
+        var monthE = props.end_date.substring(8, 11);
+        var yearE = props.end_date.substring(12, 16);
+        var dateE = monthE + " " + dayE + ", " + yearE;
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
-        var durationInfo = Math.round(props.duration/7);
+        var dur = Math.round(props.duration/7);
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– latitude ––––– //
         if (e.latlng.lat > 0) {
-            var latitudeInfo = e.latlng.lat.toFixed(2) + " N";
+            var lat = e.latlng.lat.toFixed(2) + " N";
         } else if (e.latlng.lat < 0) {
-            var latitudeInfo = (- e.latlng.lat).toFixed(2) + " S";
+            var lat = (- e.latlng.lat).toFixed(2) + " S";
         } else {
-            var latitudeInfo = e.latlng.lat.toFixed(2);
+            var lat = e.latlng.lat.toFixed(2);
         }
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
         if (e.latlng.lng < 180) {
-            var longitudeInfo = e.latlng.lng.toFixed(2) + " E";
+            var lon = e.latlng.lng.toFixed(2) + " E";
         } else if (e.latlng.lng > 180) {
-            var longitudeInfo = (360 - e.latlng.lng).toFixed(2) + " W";
+            var lon = (360 - e.latlng.lng).toFixed(2) + " W";
         } else {
-            var longitudeInfo = e.latlng.lng.toFixed(2);
+            var lon = e.latlng.lng.toFixed(2);
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var meanAreaInfo = (props.mean_area/Math.pow(10, 9)).toFixed(2);
+        var area = (props.mean_area/Math.pow(10, 9)).toFixed(2);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
-        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + idInfo + "<br>"
-                            + "<b>Start Date</b>" + "<br>" + startDateInfo + "<br>"
-                            + "<b>End Date</b>" + "<br>" + endDateInfo + "<br>"
-                            + "<b>Duration</b>" + "<br>" + durationInfo + " weeks" + "<br>"
-                            + "<b>Latitude</b>" + "<br>" + latitudeInfo + "<br>"
-                            + "<b>Longitude</b>" + "<br>" + longitudeInfo + "<br>"
-                            + "<b>Mean Area</b>" + "<br>" + meanAreaInfo + " km" + "<sup>2</sup>";
+        this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + id + "<br>"
+                            + "<b>Start Date</b>" + "<br>" + dateS + "<br>"
+                            + "<b>End Date</b>" + "<br>" + dateE + "<br>"
+                            + "<b>Duration</b>" + "<br>" + dur + " weeks" + "<br>"
+                            + "<b>Latitude</b>" + "<br>" + lat + "<br>"
+                            + "<b>Longitude</b>" + "<br>" + lon + "<br>"
+                            + "<b>Mean Area</b>" + "<br>" + area + " km" + "<sup>2</sup>";
         };
     info.update(e.target.feature.properties);
 }
