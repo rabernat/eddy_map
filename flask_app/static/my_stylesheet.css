@@ -57,12 +57,12 @@ a {
     border: none;
     color: #ffffff;
 }
-#button-filtering {
+#button {
     background-color: #cccccc;
     border: none;
     color: #ffffff;
 }
-#button-filtering:hover {
+#button:hover {
     background-color: #988fff;
     border: none;
     color: #ffffff;
