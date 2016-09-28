@@ -261,13 +261,13 @@ $(document).ready(function() {
     var lonMax = 360;
     
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
-    var to180 = function(longitude) {
+    function to180(longitude) {
         if (longitude < 180) {
             return longitude;
         } else { 
             return (360-longitude);
         }
-    };
+    }
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     // rcs
