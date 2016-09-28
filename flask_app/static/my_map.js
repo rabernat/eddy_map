@@ -257,6 +257,15 @@ $(document).ready(function() {
     var latMax = 90;
     var lonMin = 0;
     var lonMax = 360;
+    
+    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
+    var to180 = function(longitude) {
+        if longitude > 180 {
+            return (longitude - 360);
+        } else {
+            return longitude;
+        }
+    }
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     // rcs
@@ -349,8 +358,9 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
@@ -380,8 +390,9 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
@@ -411,8 +422,9 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
@@ -442,8 +454,9 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
