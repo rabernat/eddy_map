@@ -246,7 +246,9 @@ $(document).ready(function() {
     var sliderUrl = undefined;
     var rcsSliderUrl = undefined;
     var sshSliderUrl = undefined;
-    var cchdoUrl = undefined;
+    var cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
     var datMin = "0001-01-01";
@@ -260,11 +262,11 @@ $(document).ready(function() {
     
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
     var to180 = function(longitude) {
-        if longitude > 180 {
-            return (longitude - 360);
-        } else {
+        if longitude < 180 {
             return longitude;
-        }
+        } else { 
+            return (360-longitude);
+        };
     }
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
