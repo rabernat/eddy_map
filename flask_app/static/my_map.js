@@ -246,9 +246,7 @@ $(document).ready(function() {
     var sliderUrl = undefined;
     var rcsSliderUrl = undefined;
     var sshSliderUrl = undefined;
-    var cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
-                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
-                                                   +      ","    + to180(lonMax) + ","       + latMax;
+    var cchdoUrl = undefined;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
     var datMin = "0001-01-01";
@@ -259,15 +257,6 @@ $(document).ready(function() {
     var latMax = 90;
     var lonMin = 0;
     var lonMax = 360;
-    
-    // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
-    function to180(longitude) {
-        if (longitude < 180) {
-            return longitude;
-        } else { 
-            return (360-longitude);
-        }
-    }
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     // rcs
@@ -280,6 +269,9 @@ $(document).ready(function() {
             rcsJsonUrl = "/rcs_eddy_remove";
             document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 result(s).";
         }
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
@@ -289,6 +281,9 @@ $(document).ready(function() {
         $.getJSON(rcsJsonUrl, function(jsonUrl) {
             rcsAlert = jsonUrl.properties.alert;
             document.getElementById("rcs-alert").innerHTML = rcsAlert;
+        });
+        $("#cchdo").click(function() {
+            window.location.href = cchdoUrl;
         });
     });
     // ssh
@@ -301,6 +296,9 @@ $(document).ready(function() {
             sshJsonUrl = "/ssh_eddies_remove";
             document.getElementById("ssh-alert").innerHTML = "Success! Showing all 0 result(s).";
         }
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax
+                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
+                                                   +      ","    + to180(lonMax) + ","       + latMax;
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
@@ -310,6 +308,9 @@ $(document).ready(function() {
         $.getJSON(sshJsonUrl, function(jsonUrl) {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
+        $("#cchdo").click(function() {
+            window.location.href = cchdoUrl;
         });
     });
 
@@ -360,7 +361,7 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax 
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax
                                                    + "&bbox="    + to180(lonMin) + ","       + latMin
                                                    +      ","    + to180(lonMax) + ","       + latMax;
         $("#cchdo").click(function() {
