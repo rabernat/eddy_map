@@ -246,6 +246,7 @@ $(document).ready(function() {
     var sliderUrl = undefined;
     var rcsSliderUrl = undefined;
     var sshSliderUrl = undefined;
+    var cchdoUrl = undefined;
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– variable ––––– //
     var datMin = "0001-01-01";
@@ -348,6 +349,11 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
+                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        $("#cchdo").click(function() {
+            alert(cchdoUrl);
+        });
     });
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– duration ––––– //
@@ -373,6 +379,11 @@ $(document).ready(function() {
         $.getJSON(sshSliderUrl, function(jsonUrl) {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
+                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        $("#cchdo").click(function() {
+            alert(cchdoUrl);
         });
     });
 
@@ -400,6 +411,11 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
+                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        $("#cchdo").click(function() {
+            alert(cchdoUrl);
+        });
     });
 
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
@@ -425,6 +441,11 @@ $(document).ready(function() {
         $.getJSON(sshSliderUrl, function(jsonUrl) {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
+        });
+        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax 
+                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        $("#cchdo").click(function() {
+            alert(cchdoUrl);
         });
     });
 });

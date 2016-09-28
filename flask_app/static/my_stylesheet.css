@@ -47,16 +47,6 @@ a {
 
 
 /* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
-#button-cchdo {
-    background-color: #cccccc;
-    border: none;
-    color: #ffffff;
-}
-#button-cchdo:hover {
-    background-color: #00ddcc;
-    border: none;
-    color: #ffffff;
-}
 #button {
     background-color: #cccccc;
     border: none;
@@ -67,6 +57,17 @@ a {
     border: none;
     color: #ffffff;
 }
+#cchdo {
+    background-color: #cccccc;
+    border: none;
+    color: #ffffff;
+}
+#cchdo:hover {
+    background-color: #00ddcc;
+    border: none;
+    color: #ffffff;
+}
+
 
 
 /* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– */
