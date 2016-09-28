@@ -281,7 +281,7 @@ $(document).ready(function() {
         });
         cchdoUrl = "https://cchdo.ucsd.edu/search?dtstart=0001-01-01";
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
     // ssh
@@ -306,7 +306,7 @@ $(document).ready(function() {
         });
         cchdoUrl = "https://cchdo.ucsd.edu/search?dtstart=0001-01-01";
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
 
@@ -360,7 +360,7 @@ $(document).ready(function() {
         cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
                                                    + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
 
@@ -391,7 +391,7 @@ $(document).ready(function() {
         cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
                                                    + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
 
@@ -422,7 +422,7 @@ $(document).ready(function() {
         cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
                                                    + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
 
@@ -453,7 +453,7 @@ $(document).ready(function() {
         cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
                                                    + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
         $("#cchdo").click(function() {
-            window.location.href = cchdoUrl;
+            window.open(cchdoUrl);
         });
     });
 });
