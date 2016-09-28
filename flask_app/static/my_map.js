@@ -269,9 +269,6 @@ $(document).ready(function() {
             rcsJsonUrl = "/rcs_eddy_remove";
             document.getElementById("rcs-alert").innerHTML = "Success! Showing all 0 result(s).";
         }
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin        + "&dtend=" + datMax
-                                                   + "&bbox="    + to180(lonMin) + ","       + latMin
-                                                   +      ","    + to180(lonMax) + ","       + latMax;
         info.update = function() {
             this._div.innerHTML = "<b>Eddy Info</b>" + "<br>" + "Click an eddy.";
         };
@@ -282,8 +279,7 @@ $(document).ready(function() {
             rcsAlert = jsonUrl.properties.alert;
             document.getElementById("rcs-alert").innerHTML = rcsAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search?dtstart=0001-01-01";
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
@@ -308,8 +304,7 @@ $(document).ready(function() {
             sshAlert = jsonUrl.properties.alert;
             document.getElementById("ssh-alert").innerHTML = sshAlert;
         });
-        cchdoUrl = "https://cchdo.ucsd.edu/search" + "?dtstart=" + datMin + "&dtend=" + datMax
-                                                   + "&bbox=" + lonMin + "," + latMin + "," + lonMax + "," + latMax;
+        cchdoUrl = "https://cchdo.ucsd.edu/search?dtstart=0001-01-01";
         $("#cchdo").click(function() {
             window.location.href = cchdoUrl;
         });
