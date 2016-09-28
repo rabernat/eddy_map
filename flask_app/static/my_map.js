@@ -262,7 +262,7 @@ $(document).ready(function() {
     
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– longitude ––––– //
     var to180 = function(longitude) {
-        if longitude < 180 {
+        if (longitude < 180) {
             return longitude;
         } else { 
             return (360-longitude);
