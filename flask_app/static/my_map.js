@@ -266,8 +266,8 @@ $(document).ready(function() {
             return longitude;
         } else { 
             return (360-longitude);
-        };
-    }
+        }
+    };
 
     // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– checkbox ––––– //
     // rcs
