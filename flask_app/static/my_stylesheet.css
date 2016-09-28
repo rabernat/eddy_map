@@ -47,12 +47,22 @@ a {
 
 
 /* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
-#button {
+#button-cchdo {
     background-color: #cccccc;
     border: none;
     color: #ffffff;
 }
-#button:hover {
+#button-cchdo:hover {
+    background-color: #00ddcc;
+    border: none;
+    color: #ffffff;
+}
+#button-filtering {
+    background-color: #cccccc;
+    border: none;
+    color: #ffffff;
+}
+#button-filtering:hover {
     background-color: #988fff;
     border: none;
     color: #ffffff;
