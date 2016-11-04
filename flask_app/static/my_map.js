@@ -195,7 +195,7 @@ function eddyInfo(e) {
         }
 
         // ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– area ––––– //
-        var area = (props.mean_area/Math.pow(10, 9)).toFixed(2);
+        var area = (props.mean_area/Math.pow(10, 6)).toFixed(0);
 
         // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– print ––––– //
         this._div.innerHTML = "<b>Eddy ID</b>" + "<br>" + id + "<br>"
@@ -204,7 +204,7 @@ function eddyInfo(e) {
                             + "<b>Duration</b>" + "<br>" + dur + " weeks" + "<br>"
                             + "<b>Latitude</b>" + "<br>" + lat + "<br>"
                             + "<b>Longitude</b>" + "<br>" + lon + "<br>"
-                            + "<b>Mean Area</b>" + "<br>" + area + " km" + "<sup>2</sup>";
+                            + "<b>Area</b>" + "<br>" + area + " km" + "<sup>2</sup>";
         };
     info.update(e.target.feature.properties);
 }
