@@ -12,7 +12,7 @@ $("[name='rcs']").bootstrapSwitch({
     offColor: "default",
     onText: "ON",
     offText: "OFF",
-    labelText: "RCS",
+    labelText: "RCLV",
     handleWidth: "60",
     labelWidth: "60"
 });
@@ -32,7 +32,7 @@ $("[name='ssh']").bootstrapSwitch({
     offColor: "danger",
     onText: "ON",
     offText: "OFF",
-    labelText: "SSH",
+    labelText: "SSHA",
     handleWidth: "60",
     labelWidth: "60"
 });
