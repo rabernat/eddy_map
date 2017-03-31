@@ -6,5 +6,5 @@ Ocean Eddy Map is an interactive application in which the positions, sizes, and 
 
 ### Data
 
-Sea Surface Height Abnomaly (SSHA) eddies
+Sea Surface Height Anomaly (SSHA) eddies
 Rotationally Coherent Lagrangian Vortex (RCLV) eddies
