@@ -3,13 +3,13 @@
 from bson import json_util
 from datetime import datetime
 from flask import Flask, jsonify, request, Response, send_file
-from flask.ext.pymongo import PyMongo
+from flask_pymongo import PyMongo
 import json
 
 
 # --------------------------------------------------------------------------------------- basics ----- #
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'eddies'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/eddies'
 mongo = PyMongo(app)
 
 
