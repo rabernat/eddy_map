@@ -1,7 +1,8 @@
 name: flask_eddy_map
 dependencies:
-  - python=2.7
-  - flask=0.10
-  - pymongo=3.0.3
+
+  - python=2.7.15
+  - flask=1.0.2
+  - pymongo=3.7.0
   - pip:
-    - Flask-PyMongo
+    - Flask-PyMongo=2.0.1

@@ -1,0 +1,88 @@
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– padding ––––– */
+* {
+    box-sizing: content-box;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– link ––––– */
+a {
+   outline: 0;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– header ––––– */
+.header {
+    color: #666666;
+}
+.header a:link {
+    color: #666666;
+    text-decoration: none;
+}
+.header a:hover {
+    color: #00ddcc !important;
+}
+.header a:visited {
+    color: #666666;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– info ––––– */
+.info {
+    background-color: rgba(255,255,255,0.8);
+    border-color: #cccccc;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+    color: #666666;
+    font-family: Raleway;
+    font-size: 16px;
+    padding: 4px 8px;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– slider ––––– */
+.slider {
+    color: #ffffff;
+}
+
+
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– button ––––– */
+#button {
+    background-color: #cccccc;
+    border: none;
+    color: #ffffff;
+}
+#button:hover {
+    background-color: #988fff;
+    border: none;
+    color: #ffffff;
+}
+#cchdo {
+    background-color: #cccccc;
+    border: none;
+    color: #ffffff;
+}
+#cchdo:hover {
+    background-color: #00ddcc;
+    border: none;
+    color: #ffffff;
+}
+
+
+
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– map ––––– */
+#mapid {
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    height: 500px;
+    width: 100%;
+    z-index: 10;
+}
+
+
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– panel ––––– */
+#panelSlider {
+    color: #ffffff;
+    padding-left: 10%;
+    padding-right: 13.5%;
+}

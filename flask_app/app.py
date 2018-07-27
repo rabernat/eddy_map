@@ -1,37 +1,212 @@
+# -------------------------------------------------------------------------------------- imports ----- #
 #!/usr/bin/env python
-from flask import Flask, jsonify, send_file, request, Response
-from flask.ext.pymongo import PyMongo
-import json
 from bson import json_util
+from datetime import datetime
+from flask import Flask, jsonify, request, Response, send_file
+from flask_pymongo import PyMongo
+import json
 
+
+# --------------------------------------------------------------------------------------- basics ----- #
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'eddies'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/eddies'
 mongo = PyMongo(app)
-#COLLECTION = 'rcs_eddies'
-COLLECTION = 'ssh_eddies'
 
 
+# ----------------------------------------------------------------------------------------- data ----- #
+COLLECTION_RCS = 'rcs_eddies'
+COLLECTION_SSH = 'ssh_eddies'
+
+
+# ----------------------------------------------------------------------------------------- home ----- #
 @app.route('/')
 def index():
     return send_file('static/index.html')
 
-@app.route('/eddy/<eddy_id>')
-def get_eddy(eddy_id):
-    """Full data for eddy."""
-    eddy = mongo.db[COLLECTION].find_one({'_id': int(eddy_id)})
+
+# ------------------------------------------------------------------------------------------ rcs ----- #
+
+# --------------------------------------------------------------------- eddy ----- #
+@app.route('/rcs_eddy/<string:eddy_id>')
+def get_rcs_eddy(eddy_id):
+    eddy = mongo.db[COLLECTION_RCS].find_one({'_id': eddy_id})
     return jsonify(eddy)
 
+# ------------------------------------------------------------------- eddies ----- #
+@app.route('/rcs_eddies')
+def get_rcs_eddies(full_data=False, mean_trajectory=False,
+                   dat_min=datetime.strptime('0001-01-01-12', '%Y-%m-%d-%H'),
+                   dat_max=datetime.strptime('9999-12-31-12', '%Y-%m-%d-%H'),
+                   dur_min=0, dur_max=10**10, lat_min=-90, lat_max=90, lon_min=0, lon_max=360):
+
+    # ------------------------------------------------- date ----- #
+    if request.args.get('dat_min'):
+        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
+    if request.args.get('dat_max'):
+        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
+
+    # --------------------------------------------- latitude ----- #
+    if request.args.get('lat_min'):
+        lat_min = float(request.args.get('lat_min'))
+    if request.args.get('lat_max'):
+        lat_max = float(request.args.get('lat_max'))
+
+    # -------------------------------------------- longitude ----- #
+    if request.args.get('lon_min'):
+        lon_min = float(request.args.get('lon_min'))
+    if request.args.get('lon_max'):
+        lon_max = float(request.args.get('lon_max'))
+
+    # ----------------------------------------------- filter ----- #
+    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
+              'duration': {'$gt': dur_min, '$lt': dur_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}}}
+
+    # ------------------------------------------------ slice ----- #
+    if full_data:
+        projection = None
+    else:
+        projection = {'features': {'$slice': 1}}
+
+    # ------------------------------------------------ alert ----- #
+    loading_max = 1000;
+    result_count = mongo.db[COLLECTION_RCS].find(filter, projection).count()
+    if result_count > loading_max:
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
+    else:
+        alert = "Success! Showing all " + str(result_count) + " result(s)."
+
+    # ----------------------------------------------- inject ----- #
+    data = []
+    for eddy in mongo.db[COLLECTION_RCS].find(filter, projection).limit(loading_max):
+        try:
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['duration'] = eddy['duration']
+            eddy['features'][0]['properties']['mean_area'] = eddy['area']
+            if mean_trajectory:
+                start_pt = eddy['features'][0]['geometry']['coordinates']
+                end_pt = eddy['features'][1]['geometry']['coordinates']
+                eddy['features'].append({
+                    'type': 'Feature',
+                    'properties': {'name': 'trajectory'},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [start_pt, end_pt]
+                    }
+                })
+            data.append(eddy)
+        except KeyError:
+            app.logger.warning('problem parsing eddy ' + eddy['_id'])
+
+    # ------------------------------------------------- wrap ----- #
+    fc = {'type': 'FeatureCollection', 'features': data, 'properties': {'alert': alert}}
+    return jsonify(fc)
+
+
+# ------------------------------------------------------------------------------------------ ssh ----- #
+
+# --------------------------------------------------------------------- eddy ----- #
+@app.route('/ssh_eddy/<int:eddy_id>')
+def get_ssh_eddy(eddy_id):
+    eddy = mongo.db[COLLECTION_SSH].find_one({'_id': eddy_id})
+    return jsonify(eddy)
+
+# ------------------------------------------------------------------- eddies ----- #
+@app.route('/ssh_eddies')
+def get_ssh_eddies(full_data=False, mean_trajectory=False,
+                   dat_min=datetime.strptime('0001-01-01-12', '%Y-%m-%d-%H'),
+                   dat_max=datetime.strptime('9999-12-31-12', '%Y-%m-%d-%H'),
+                   dur_min=0, dur_max=10**10, lat_min=-90, lat_max=90, lon_min=0, lon_max=360):
+
+    # ------------------------------------------------- date ----- #
+    if request.args.get('dat_min'):
+        dat_min = datetime.strptime(str(request.args.get('dat_min'))+'-12', '%Y-%m-%d-%H')
+    if request.args.get('dat_max'):
+        dat_max = datetime.strptime(str(request.args.get('dat_max'))+'-12', '%Y-%m-%d-%H')
+
+    # --------------------------------------------- duration ----- #
+    if request.args.get('dur_min'):
+        dur_min = int(request.args.get('dur_min'))*7
+    if request.args.get('dur_max'):
+        dur_max = int(request.args.get('dur_max'))*7
+
+    # --------------------------------------------- latitude ----- #
+    if request.args.get('lat_min'):
+        lat_min = float(request.args.get('lat_min'))
+    if request.args.get('lat_max'):
+        lat_max = float(request.args.get('lat_max'))
+
+    # -------------------------------------------- longitude ----- #
+    if request.args.get('lon_min'):
+        lon_min = float(request.args.get('lon_min'))
+    if request.args.get('lon_max'):
+        lon_max = float(request.args.get('lon_max'))
+
+    # ----------------------------------------------- filter ----- #
+    filter = {'date_start': {'$gt': dat_min, '$lt': dat_max},
+              'duration': {'$gt': dur_min, '$lt': dur_max},
+              'loc_start': {'$within': {'$box': [[lon_min, lat_min], [lon_max, lat_max]]}}}
+
+    # ------------------------------------------------ slice ----- #
+    if full_data:
+        projection = None
+    else:
+        projection = {'features': {'$slice': 1}}
+
+    # ------------------------------------------------ alert ----- #
+    loading_max = 1000;
+    result_count = mongo.db[COLLECTION_SSH].find(filter, projection).count()
+    if result_count > loading_max:
+        alert = "Warning! Showing " + str(loading_max) + "/" + str(result_count) + " result(s)."
+    else:
+        alert = "Success! Showing all " + str(result_count) + " result(s)."
+
+    # ----------------------------------------------- inject ----- #
+    data = []
+    for eddy in mongo.db[COLLECTION_SSH].find(filter, projection).limit(loading_max):
+        try:
+            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
+            eddy['features'][0]['properties']['start_date'] = eddy['date_start']
+            eddy['features'][0]['properties']['end_date'] = eddy['date_end']
+            eddy['features'][0]['properties']['duration'] = eddy['duration']
+            eddy['features'][0]['properties']['mean_area'] = eddy['area']
+            if mean_trajectory:
+                start_pt = eddy['features'][0]['geometry']['coordinates']
+                end_pt = eddy['features'][1]['geometry']['coordinates']
+                eddy['features'].append({
+                    'type': 'Feature',
+                    'properties': {'name': 'trajectory'},
+                    'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [start_pt, end_pt]
+                    }
+                })
+            data.append(eddy)
+        except KeyError:
+            app.logger.warning('problem parsing eddy ' + eddy['_id'])
+
+    # ------------------------------------------------- wrap ----- #
+    fc = {'type': 'FeatureCollection', 'features': data, 'properties': {'alert': alert}}
+    return jsonify(fc)
+
+
+# ----------------------------------------------------------------------------------------- test ----- #
 @app.route('/eddy_stream')
 def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
     """Query mongodb for all eddies in the database."""
-
     # maybe overwrite duration from query string
     if request.args.get('duration'):
         duration = int(request.args.get('duration'))
-
     # get everything
-    filter = {'duration': duration} 
-
+    filter = {'duration': duration}
     if full_data:
         # get all fields, overloads the browser
         projection = None
@@ -39,9 +214,7 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
         # just get the first two features
         # (initial center, final center)
         projection = {'features': {'$slice': 1}}
-
     query = mongo.db[COLLECTION].find(filter, projection)
-
     # https://blog.al4.co.nz/2016/01/streaming-json-with-flask/
     def generate():
         """
@@ -50,7 +223,6 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
         thus we use a lagging generator, similar to http://stackoverflow.com/questions/1630320/
         """
         releases = query.__iter__()
-
         json_prefix = '{"type": "FeatureCollection", "features": ['
         json_suffix = ']}'
         try:
@@ -67,57 +239,15 @@ def stream_eddies(full_data=False, duration=30, add_mean_trajectory=False):
             prev_release = release
         # Now yield the last iteration without comma but with the closing brackets
         yield json.dumps(prev_release, default=json_util.default) + json_suffix
-
     return Response(generate(), content_type='application/json')
 
 
-@app.route('/eddies')
-def get_eddies(full_data=False, duration=30, add_mean_trajectory=False):
-    """Query mongodb for all eddies in the database."""
-
-    # maybe overwrite duration from query string
-    if request.args.get('duration'):
-        duration = int(request.args.get('duration'))
-
-    # get everything
-    #filter = {'duration': duration} 
-    filter = {}
-
-    if full_data:
-    # get all fields, overloads the browser
-        projection = None
-    else:
-        # just get the first two features
-        # (initial center, final center)
-        projection = {'features': {'$slice': 1}}
-
-    data = []
-    for eddy in mongo.db[COLLECTION].find(filter, projection):
-        # inject id into properties of start point
-        try:
-            eddy['features'][0]['properties']['eddy_id'] = eddy['_id']
-            if add_mean_trajectory:
-                start_pt = eddy['features'][0]['geometry']['coordinates']
-                end_pt = eddy['features'][1]['geometry']['coordinates']
-                eddy['features'].append({
-                    'type': 'Feature',
-                    'properties': {'name': 'trajectory'},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': [start_pt, end_pt]
-                        }
-                    })
-            data.append(eddy)
-        except KeyError:
-            app.logger.warning('problem parsing eddy ' + eddy['_id'])
-    
-    # wrap data into a larger FeatureCollection
-    fs = {'type': 'FeatureCollection', 'features': data}
-    return jsonify(fs)
-
+# ----------------------------------------------------------------------------------------- path ----- #
 @app.route('/static/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
 
+
+# ------------------------------------------------------------------------------------------ end ----- #
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
